@@ -1,6 +1,6 @@
 # Zero to DevOps in Under an Hour with Kubernetes 
 
-This repo contains the code presented in the talk. Slides available here: (http://slides.com/dalealleshouse/kube)[http://slides.com/dalealleshouse/kube]
+This repo contains the code presented in the talk. Slides available [here](http://slides.com/dalealleshouse/kube)
 
 ## Abstract
 The benefits of containerization cannot be overstated. Tools like Docker have
