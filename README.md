@@ -120,8 +120,8 @@ docker build --tag=status-api:1.0 status-api/
 docker pull rabbitmq:3.6.6-management
 
 # point to the local docker daemon
-# eval $(minikube docker-env -u) on
-Mac/Linux & minikube docker-env -u | Invoke-Expression
+# eval $(minikube docker-env -u) on Mac/Linux 
+& minikube docker-env -u | Invoke-Expression
 ```
 
 ## Demo
