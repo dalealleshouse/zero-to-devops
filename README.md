@@ -105,19 +105,24 @@ all containers using the docker daemon on the minikube machine. If you are
 trying to reproduce the demo, I recommend using docker hub (or something
 equivalent), pushing images there, and allowing Kubernetes to pull them.
 
-``` powershell git clone https://github.com/dalealleshouse/zero-to-devops.git
+``` powershell
+git clone https://github.com/dalealleshouse/zero-to-devops.git
 cd zero-to-devops
 
-# point to the docker daemon on the minikube machine # eval $(minikube
+# point to the docker daemon on the minikube machine 
+# eval $(minikube
 docker-env) on Mac/Linux & minikube docker-env | Invoke-Expression
 
-docker build --tag=html-frontend:1.0 html-frontend/ docker build
---tag=java-consumer:1.0 java-consumer/ docker build --tag=ruby-producer:1.0
-ruby-producer/ docker build --tag=status-api:1.0 status-api/ docker pull
-rabbitmq:3.6.6-management
+docker build --tag=html-frontend:1.0 html-frontend/
+docker build --tag=java-consumer:1.0 java-consumer/ 
+docker build --tag=ruby-producer:1.0 ruby-producer/
+docker build --tag=status-api:1.0 status-api/
+docker pull rabbitmq:3.6.6-management
 
-# point to the local docker daemon # eval $(minikube docker-env -u) on
-Mac/Linux & minikube docker-env -u | Invoke-Expression ```
+# point to the local docker daemon
+# eval $(minikube docker-env -u) on
+Mac/Linux & minikube docker-env -u | Invoke-Expression
+```
 
 ## Demo
 
