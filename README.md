@@ -64,7 +64,7 @@ Special Windows 10 minikube configuration:
   - On the Sharing Tab, Select "Allow other network users to connect through .."
   - Select "vEthernet (minikube)" from the drop down list Click OK and close Network Connections
 - Path minikube
-  - Download [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe)
+  - Download [minikube](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
   - Save the file in an easily accessible path
   - Run the command below
 
