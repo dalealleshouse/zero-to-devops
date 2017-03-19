@@ -110,8 +110,8 @@ git clone https://github.com/dalealleshouse/zero-to-devops.git
 cd zero-to-devops
 
 # point to the docker daemon on the minikube machine 
-# eval $(minikube
-docker-env) on Mac/Linux & minikube docker-env | Invoke-Expression
+# eval $(minikube docker-env) on Mac/Linux 
+& minikube docker-env | Invoke-Expression
 
 docker build --tag=html-frontend:1.0 html-frontend/
 docker build --tag=java-consumer:1.0 java-consumer/ 
