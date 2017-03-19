@@ -26,9 +26,9 @@ Special Windows 10 minikube configuration:
 
 - Configure HyperV (If you are able to run Docker, it should be)
 - Create a Virtual Switch in Hyper-V:
-       - Open Hyper-V Manager
-       - Select Virtual Switch Manager
-       - Select the "Internal" switch type
+    - Open Hyper-V Manager
+    - Select Virtual Switch Manager
+    - Select the "Internal" switch type
        - Click the "Create Virutal Switch" button
        - Name the switch "minikube"
        - Close Virtual Switch Manager and Hyper-V Manager
@@ -39,7 +39,7 @@ Special Windows 10 minikube configuration:
         - Select "vEthernet (minikube)" from the drop down list
         - Click OK and close Network Connections
 - Path minikube
-        - Download the windows [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe)
+        - Download [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
         - Save the file in an easily accessible path
         - Modify your powershell profile by adding "New-Alias minikube **PATH-TO-MINIKUBE-EXE**" (Alternativly, you can just type this in the command prompt everytime you use minikube)
 
