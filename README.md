@@ -16,9 +16,9 @@ and Service Discovery/Load Balancing.
 
 ## Prerequisites
 
-1) [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) 1)
-[Docker](https://www.docker.com/community-edition) 1)
-[kubectl](https://kubernetes.io/docs/tasks/kubectl/install/)
+1) [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+1) [Docker](https://www.docker.com/community-edition)
+1) [kubectl](https://kubernetes.io/docs/tasks/kubectl/install/)
 
 ## Kubernetes Cluster
 
@@ -53,17 +53,20 @@ experience and I'll happily accept a pull request.
 
 Special Windows 10 minikube configuration:
 
-- Configure HyperV (If you are able to run Docker, it should be) Create a
-- Virtual Switch in Hyper-V: Open Hyper-V Manager Select Virtual Switch Manager
-- Select the "Internal" switch type Click the "Create Virtual Switch" button
-- Name the switch "minikube" Close Virtual Switch Manager and Hyper-V Manager
-- Expose the Virtual Switch Click the Windows Button and type "View Network
-- Connection" and open it Right click on your network connection and select
-- "Properties" On the Sharing Tab, Select "Allow other network users to connect
-- through .." Select "vEthernet (minikube)" from the drop down list Click OK
-- and close Network Connections Path minikube Download [minikube
-- exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe)
-- for windows Save the file in an easily accessible path Run the command below
+- Configure HyperV (If you are able to run Docker, it should be)
+- Create a Virtual Switch in Hyper-V:
+  - Open Hyper-V Manager Select Virtual Switch Manager
+  - Select the "Internal" switch type Click the "Create Virtual Switch" button
+  - Name the switch "minikube" Close Virtual Switch Manager and Hyper-V Manager
+- Expose the Virtual Switch
+  - Click the Windows Button and type "View Network Connection", open it
+  - Right click on your network connection and select "Properties"
+  - On the Sharing Tab, Select "Allow other network users to connect through .."
+  - Select "vEthernet (minikube)" from the drop down list Click OK and close Network Connections
+- Path minikube
+  - Download [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe)
+  - Save the file in an easily accessible path
+  - Run the command below
 
 ``` powershell New-Alias minikube *PATH-TO-MINIKUBE-EXE* ```
 
