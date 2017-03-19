@@ -68,25 +68,29 @@ Special Windows 10 minikube configuration:
   - Save the file in an easily accessible path
   - Run the command below
 
-``` powershell New-Alias minikube *PATH-TO-MINIKUBE-EXE* ```
+``` powershell
+New-Alias minikube *PATH-TO-MINIKUBE-EXE* 
+```
 
 Start minikube which will automatically configures kubectl. This requires
 opening Powershell in administration mode.
 
-``` powershell minikube --vm-driver=hyperv --hyperv-virtual-switch=minikube
-start ```
+``` powershell
+minikube --vm-driver=hyperv --hyperv-virtual-switch=minikube start 
+```
 
 Verify everything is configured correctly with the following command.
 
-``` powershell kubectl cluster-info ```
+``` powershell 
+kubectl cluster-info 
+```
 
 It should produce output such as the following:
 
-``` powershell Kubernetes master is running at https://*YOUR-IP*:8443 KubeDNS
-is running at
-https://*YOUR-IP*:8443/api/v1/proxy/namespaces/kube-system/services/kube-dns
-kubernetes-dashboard is running at
-https://*YOUR-IP*:8443/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard
+``` powershell
+Kubernetes master is running at https://*YOUR-IP*:8443
+KubeDNS is running at https://*YOUR-IP*:8443/api/v1/proxy/namespaces/kube-system/services/kube-dns
+kubernetes-dashboard is running at https://*YOUR-IP*:8443/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard
 ```
 
 TODO: kubectl get cs
