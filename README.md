@@ -26,22 +26,22 @@ Special Windows 10 minikube configuration:
 
 - Configure HyperV (If you are able to run Docker, it should be)
 - Create a Virtual Switch in Hyper-V:
-    - Open Hyper-V Manager
-    - Select Virtual Switch Manager
-    - Select the "Internal" switch type
-       - Click the "Create Virutal Switch" button
-       - Name the switch "minikube"
-       - Close Virtual Switch Manager and Hyper-V Manager
+  - Open Hyper-V Manager
+  - Select Virtual Switch Manager
+  - Select the "Internal" switch type
+  - Click the "Create Virutal Switch" button
+  - Name the switch "minikube"
+  - Close Virtual Switch Manager and Hyper-V Manager
 - Expose the Virtual Switch
-        - Click the Windows Button and type "View Network Connection" and it
-        - Right click on your network connection and select "Properties"
-        - On the Sharing Tab, Select "Allow other network users to connect through .."
-        - Select "vEthernet (minikube)" from the drop down list
-        - Click OK and close Network Connections
+    - Click the Windows Button and type "View Network Connection" and it
+    - Right click on your network connection and select "Properties"
+    - On the Sharing Tab, Select "Allow other network users to connect through .."
+    - Select "vEthernet (minikube)" from the drop down list
+    - Click OK and close Network Connections
 - Path minikube
-        - Download [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
-        - Save the file in an easily accessible path
-        - Modify your powershell profile by adding "New-Alias minikube **PATH-TO-MINIKUBE-EXE**" (Alternativly, you can just type this in the command prompt everytime you use minikube)
+    - Download [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
+    - Save the file in an easily accessible path
+    - Modify your powershell profile by adding "New-Alias minikube **PATH-TO-MINIKUBE-EXE**" (Alternativly, you can just type this in the command prompt everytime you use minikube)
 
 
 ## Preparing the Demo
