@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Docker Example</title>
+</head>
+<style>
+	h1 {
+ 		position: relative;
+		padding: 30px 0;
+		color: #eff0ff;
+		text-align: center;
+		text-shadow: 0 1px 0 rgba(0,0,0,.1);
+		background-color: #545499;
+		background-image: -webkit-gradient(linear, left top, left bottom, from(#563d7c), to(#6f5499));
+		background-image: -webkit-linear-gradient(top, #3a3d7c 0%, #505499 100%);
+		background-image:      -o-linear-gradient(top, #3a3d7c 0%, #505499 100%);
+		background-image:         linear-gradient(to bottom, #3a3d7c 0%, #505499 100%);
+		background-repeat: repeat-x;
+		max-width: 800px;
+		margin: 0 auto;		
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+
+	}
+	.docker-demo {
+		padding: 4px;
+		color: #111111;
+		background-color: #f0f0f0;
+		border-bottom-left-radius: 4px;
+		border-bottom-right-radius: 4px;
+		text-align: center;
+		max-width: 792px;
+		margin: 0 auto;
+	}
+</style>
+<body>
+	<h1>RabbitMQ Task Status</h1>
+	<div class="docker-demo">
+		<p>In Queue: <span id="queue"></span></p>
+		<p>In Progress: <span id="progress"></span></p>
+		<p>Completed: <span id="completed"></span></p>
+	</>
+	<script>
+		var url = "http://127.0.0.1:5000/status";
+		function load_data() {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == XMLHttpRequest.DONE) {
+					if (xhr.status == 200) {
+						var response = JSON.parse(xhr.responseText);
+						document.getElementById("queue").innerHTML = response.queue_totals.messages_ready;
+						document.getElementById("progress").innerHTML = response.queue_totals.messages_unacknowledged;
+						document.getElementById("completed").innerHTML = response.message_stats.ack;
+					}
+					setTimeout(load_data, 2000);
+				}
+			};
+			xhr.open('GET', url, true);
+			xhr.send();
+		}
+		load_data();
+	</script>
+</body>
+
+</html>

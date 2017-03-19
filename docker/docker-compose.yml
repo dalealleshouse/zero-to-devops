@@ -1,0 +1,48 @@
+version: '2'
+services:
+  queue:
+    image: rabbitmq:3.6.6-management
+    hostname: queue
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - demo
+
+  java-consumer:
+   build: ../java-consumer
+   depends_on:
+     - queue
+   networks:
+      - demo
+
+  ruby-producer:
+   build: ../ruby-producer
+   depends_on:
+     - queue
+   networks:
+      - demo
+
+  status-api:
+    build: ../status-api
+    depends_on:
+      - queue
+      - java-consumer
+      - ruby-producer
+    ports:
+      - "5000:5000"
+    networks:
+      - demo
+
+  html-frontend:
+    build: ../html-frontend
+    depends_on:
+      - status-api
+    ports:
+      - "80:80"
+    networks:
+      - demo
+
+networks:
+  demo:
+    driver: bridge
