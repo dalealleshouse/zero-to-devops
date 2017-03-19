@@ -18,7 +18,11 @@ Discovery/Load Balancing.
 1) [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 1) [Docker](https://www.docker.com/community-edition)
 1) [kubectl](https://kubernetes.io/docs/tasks/kubectl/install/)
-1) [Minikube](https://github.com/kubernetes/minikube)
+
+## Kubernetes Cluster
+
+[Minikube](https://github.com/kubernetes/minikube) is used for demo puroses. It is a small kubernetes cluster for use in local devlopment. It runs in a virtual machine locally and is NOT meant for production use.
+
 
 The demo should work fine on Mac OS or Linux. However, it hasn't been tested. I used a Windows 10 machine and Powershell, which required  special minikube configuration. It's doubtful that this will work on older windows machines. However, if you are able to get it working, add information about your experince and I'll happily accept a pull request.
 
@@ -33,15 +37,15 @@ Special Windows 10 minikube configuration:
   - Name the switch "minikube"
   - Close Virtual Switch Manager and Hyper-V Manager
 - Expose the Virtual Switch
-    - Click the Windows Button and type "View Network Connection" and it
-    - Right click on your network connection and select "Properties"
-    - On the Sharing Tab, Select "Allow other network users to connect through .."
-    - Select "vEthernet (minikube)" from the drop down list
-    - Click OK and close Network Connections
+  - Click the Windows Button and type "View Network Connection" and it
+  - Right click on your network connection and select "Properties"
+  - On the Sharing Tab, Select "Allow other network users to connect through .."
+  - Select "vEthernet (minikube)" from the drop down list
+  - Click OK and close Network Connections
 - Path minikube
-    - Download [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
-    - Save the file in an easily accessible path
-    - Modify your powershell profile by adding "New-Alias minikube **PATH-TO-MINIKUBE-EXE**" (Alternativly, you can just type this in the command prompt everytime you use minikube)
+  - Download [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
+  - Save the file in an easily accessible path
+  - Modify your powershell profile by adding "New-Alias minikube **PATH-TO-MINIKUBE-EXE**" (Alternativly, you can just type this in the command prompt everytime you use minikube)
 
 
 ## Preparing the Demo
