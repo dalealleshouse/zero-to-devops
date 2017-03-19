@@ -21,10 +21,21 @@ Discovery/Load Balancing.
 
 ## Kubernetes Cluster
 
-[Minikube](https://github.com/kubernetes/minikube) is used for demo puroses. It is a small kubernetes cluster for use in local devlopment. It runs in a virtual machine locally and is NOT meant for production use.
+In order to run the demo, you must have a Kubernetes cluster and configure kubectl to point to it. Creating a cluster is easy with all three of the major cloud providers.
 
+- [Google Cloud](https://cloud.google.com/container-engine/docs/quickstart)
+- [Azure](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough)
+- [Amazon](https://kubernetes.io/docs/getting-started-guides/aws/)
 
-The demo should work fine on Mac OS or Linux. However, it hasn't been tested. I used a Windows 10 machine and Powershell, which required  special minikube configuration. It's doubtful that this will work on older windows machines. However, if you are able to get it working, add information about your experince and I'll happily accept a pull request.
+There are also many other options for running virtually anywhere, including on premise: [Kubernetes](https://kubernetes.io/docs/getting-started-guides/)
+
+The demo utilizes [Minikube](https://github.com/kubernetes/minikube) as a lightweight option for presentation purposes only.
+
+## Minikube
+
+[Minikube](https://github.com/kubernetes/minikube) is a single-node kubernetes cluster that runs inside a virtual machine intended for development use and testing only. It's a great option for presentations (like this one) because it provides a means to work with kubernetes locally without an internet connection. Yes, believe it or not, internet connectivity is a bit capricious at conferences and meet ups.
+
+The demo should work fine on Mac or Linux. However, it hasn't been tested. I used a Windows 10 machine and Powershell, which required  special minikube configuration. It's doubtful that this will work on older windows machines. However, if you are able to get it working, add information about your experience and I'll happily accept a pull request.
 
 Special Windows 10 minikube configuration:
 
@@ -33,11 +44,11 @@ Special Windows 10 minikube configuration:
   - Open Hyper-V Manager
   - Select Virtual Switch Manager
   - Select the "Internal" switch type
-  - Click the "Create Virutal Switch" button
+  - Click the "Create Virtual Switch" button
   - Name the switch "minikube"
   - Close Virtual Switch Manager and Hyper-V Manager
 - Expose the Virtual Switch
-  - Click the Windows Button and type "View Network Connection" and it
+  - Click the Windows Button and type "View Network Connection" and open it
   - Right click on your network connection and select "Properties"
   - On the Sharing Tab, Select "Allow other network users to connect through .."
   - Select "vEthernet (minikube)" from the drop down list
@@ -45,22 +56,35 @@ Special Windows 10 minikube configuration:
 - Path minikube
   - Download [minikube exe](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
   - Save the file in an easily accessible path
-  - Modify your powershell profile by adding "New-Alias minikube **PATH-TO-MINIKUBE-EXE**" (Alternativly, you can just type this in the command prompt everytime you use minikube)
-
-
-## Preparing the Demo
-
-Start minikube
-
-New-Alias minikube C:\tools\minikube\minikube-windows-amd64.exe
-
-Unable to connect to the server: dial tcp [fe80::215:5dff:fec8:5c07]:8443: connectex: No connection could be made because the target machine actively refused it.
-
-https://github.com/kubernetes/minikube/issues/754#issuecomment-258129252
+  - Run the command below
 
 ``` powershell
-minikube --vm-driver=[OS-DEPENDANT] --hyperv-virtual-switch=minikube start
+New-Alias minikube *PATH-TO-MINIKUBE-EXE*
 ```
+
+Start minikube which will automatically configures kubectl. This requires opening Powershell in administration mode.
+
+``` powershell
+minikube --vm-driver=hyperv --hyperv-virtual-switch=minikube start
+```
+
+Verify everything is configured correctly with the following command.
+
+``` powershell
+kubectl cluster-info
+```
+
+It should produce output such as the following:
+
+``` powershell
+Kubernetes master is running at https://*YOUR-IP*:8443
+KubeDNS is running at https://*YOUR-IP*:8443/api/v1/proxy/namespaces/kube-system/services/kube-dns
+kubernetes-dashboard is running at https://*YOUR-IP*:8443/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard
+```
+
+## Demo
+
+As explained above, you should have a kubernetes cluster running and kubectl configured to point to it.
 
 Clone this project
 
