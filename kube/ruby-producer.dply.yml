@@ -2,14 +2,15 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: ruby-producer
-  app: demo
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: demo
+        app: ruby-producer
     spec:
-    - name: ruby-producer
-      image: ruby-producer:1.0
-      ports:
+      containers:
+      - name: ruby-producer
+        image: ruby-producer:1.0
+        ports:
+        - containerPort: 80
