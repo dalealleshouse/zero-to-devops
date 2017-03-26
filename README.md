@@ -130,3 +130,28 @@ Before beginning, as explained above, you should have a kubernetes cluster
 running and kubectl configured to point to it. Additionally, all the five
 container images should either be locally available on your cluster or the
 cluster should have access to download them.
+
+kubectl set image deployment/html-frontend html-frontend=html-frontend:2.0
+kubectl scale deployment java-consumer --replicas=10
+
+kubectl config use-context minikube
+
+minikube addons enable heapster
+minikube addons open heapster
+
+
+1. High level overview of Kubernetes
+    - Node layout
+    - Master Nodes
+    - Services Running On Each Node
+    - Scheduler
+        - Binpacking
+1. Demo
+    - Deployments
+        - Health Checks
+        - Rolling Deployments
+    - Services
+        - External
+        - Internal
+    - Auto Scaling
+    - Monitoring

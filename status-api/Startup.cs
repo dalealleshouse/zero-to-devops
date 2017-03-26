@@ -36,7 +36,10 @@
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            app.UseCors(builder => builder.WithOrigins("http://127.0.0.1", "http://localhost"));
+            app.UseCors(builder => builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             app.UseMvc();
         }
