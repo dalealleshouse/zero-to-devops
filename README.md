@@ -196,15 +196,21 @@ sets*. A pod is one or more containers that share context and act as a single
 autonomous unit. Aptly named, replica sets specify the number of desired
 replicas.
 
+``` powershell
 kubectl run html-frontend --image=html-frontend:1.0 --port=80
 kubectl run java-consumer --image=java-consumer:1.0
 kubectl run ruby-producer --image=ruby-producer:1.0
 kubectl run status-api --image=status-api:1.0 port=5000
-kubectl run queue --image=rabbitmq:3.6.6-management --port=15672 --port=5672
+kubectl run queue --image=rabbitmq:3.6.6-management
+```
 
+Verify the objects were created correctly with the following command.
+
+``` powershell
 kubectl get deployments
 kubectl get pods
 kubectl get rs
+```
 
 The replica set will watch the pods and keep them running.
 
