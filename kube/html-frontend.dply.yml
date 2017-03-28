@@ -16,7 +16,7 @@ spec:
         run: html-frontend
     spec:
       containers:
-      - image: html-frontend:1.4
+      - image: html-frontend:1.0
         name: html-frontend
         ports:
         - containerPort: 80
