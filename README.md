@@ -174,6 +174,16 @@ docker pull rabbitmq:3.6.6-management
 
 ## Demo
 
+With all the requisite setup out of the way, it's time to start the actual demo.
+The image below outlines the system we are going to host on K8S.
+
+![Demo System](demo-sys.png)
+
+
+
+Ignore everything under this line...
+
+----------------------
 Before beginning, as explained above, you should have a kubernetes cluster
 running and kubectl configured to point to it. Additionally, all the five
 container images should either be locally available on your cluster or the
