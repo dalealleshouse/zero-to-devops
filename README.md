@@ -126,8 +126,8 @@ kubectl describe ing
 ```
 
 The ingress is expecting traffic from demo.com and status.demo.com. In order to
-route traffic accordingly, you will need to update your hosts file to route
-traffic. First obtain the Minikube IP address.
+route traffic accordingly, you will need to update your hosts file. First
+obtain the Minikube IP address.
 
 ``` powershell
 minikube ip
@@ -189,6 +189,40 @@ The demo system consists of five separate applications that work together.
    second.
 1. Java Consumer pulls messages from the queue one at a time and generates
    Fibonacci numbers in order to simulate CPU bound work.
+
+The first thing to do is get each Dockerized application running in K8s. For
+this, we'll create deployments. K8S deployments package *pods* and *replica
+sets*. A pod is one or more containers that share context and act as a single
+autonomous unit. Aptly named, replica sets specify the number of desired
+replicas.
+
+kubectl run html-frontend --image=html-frontend:1.0 --port=80
+kubectl run java-consumer --image=java-consumer:1.0
+kubectl run ruby-producer --image=ruby-producer:1.0
+kubectl run status-api --image=status-api:1.0 port=5000
+kubectl run queue --image=rabbitmq:3.6.6-management --port=15672 --port=5672
+
+kubectl get deployments
+kubectl get pods
+kubectl get rs
+
+The replica set will watch the pods and keep them running.
+
+docker ps --filter name=html-frontend
+docker rm -f *CONTAINER*
+docker ps --filter name=html-frontend
+
+Now we need to expose services
+
+kubectl expose deployment queue --port=15672,5672 --name=queue
+kubectl expose deployment html-frontend --port=80 --name=html-frontend --type=NodePort
+kubectl expose deployment status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
+
+
+Now we can scale
+kubectl scale deployment html-frontend --replicas=3
+
+See how machine name changes
 
 Ignore everything under this line...
 
