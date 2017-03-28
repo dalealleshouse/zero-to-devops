@@ -181,14 +181,14 @@ demo.  The image below outlines the system we are going to host on K8S.
 
 The demo system consists of five separate applications that work together.
 
-1. NGINX serves a static HTML file to a browser.
-1. ASP.NET Core REST API accepts requests from the browser and returns the
-   number of items on the queue as well as the number of items in process.
+1. NGINX serves a static HTML file to a browser
+1. ASP.NET Core REST API accepts requests from the browser and returns queue
+   stats
 1. RabbitMQ is configured as a standard work queue
 1. Ruby Producer pushes a message with a random number on the queue every
-   second.
+   second
 1. Java Consumer pulls messages from the queue one at a time and generates
-   Fibonacci numbers in order to simulate CPU bound work.
+   Fibonacci numbers in order to simulate CPU bound work
 
 The first thing to do is get each Dockerized application running in K8s. For
 this, we'll create deployments. K8S deployments package *pods* and *replica
@@ -212,27 +212,54 @@ kubectl get pods
 kubectl get rs
 ```
 
+Each pod represents a Docker container running somewhere on the K8S cluster.
+kubectrl mirrors several Docker commands so the pods can be manipulated
+directly. For instance, you can obtain direct access to a pod with an exec
+command or view the output from stdout using a log command.
+
+``` powershell
+kubectl exec -it *POD_NAME* bash
+kubectl logs *POD_NAME*
+```
+
+If you view the logs of the ruby producer, you will notice that it unable to
+connect to the queue. This is because by default, pods are exposed via an IP
+address that may change. A K8S service provides a durable address that will
+route traffic to the specified pods. The command below create a service that
+exposes ports for the queue pod.
+
+``` powershell
+kubectl expose deployment queue --port=15672,5672 --name=queue
+```
+
+Now, if you view the logs from the ruby producer, you should see that it
+connected the queue and is sending messages. The underlying pod can change,
+containers can be created, destroyed, moved to different nodes and the service
+will be able to route traffic to them.
+
+With the queue in place, we still need to expose the nginx and status-api pods
+to external traffic
+
+
+``` powershell
+kubectl expose deployment html-frontend --port=80 --name=html-frontend --type=NodePort
+kubectl expose deployment status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
+```
+
+Ignore everything under this line...
+
+----------------------
+Now we can scale
+kubectl scale deployment html-frontend --replicas=3
+
 The replica set will watch the pods and keep them running.
 
 docker ps --filter name=html-frontend
 docker rm -f *CONTAINER*
 docker ps --filter name=html-frontend
 
-Now we need to expose services
-
-kubectl expose deployment queue --port=15672,5672 --name=queue
-kubectl expose deployment html-frontend --port=80 --name=html-frontend --type=NodePort
-kubectl expose deployment status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
-
-
-Now we can scale
-kubectl scale deployment html-frontend --replicas=3
-
 See how machine name changes
 
-Ignore everything under this line...
-
-----------------------
 Before beginning, as explained above, you should have a kubernetes cluster
 running and kubectl configured to point to it. Additionally, all the five
 container images should either be locally available on your cluster or the
