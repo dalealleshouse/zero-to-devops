@@ -2,15 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: status-api
+    run: status-api
   name: status-api
   namespace: default
 spec:
   ports:
-  - port: 5000
-    protocol: TCP
-    targetPort: 5000
+    - port: 80
+      protocol: TCP
+      targetPort: 5000
   selector:
-    app: status-api
-  sessionAffinity: None
-  type: NodePort 
+    run: status-api
+  type: NodePort

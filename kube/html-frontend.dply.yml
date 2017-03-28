@@ -1,16 +1,23 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    run: html-frontend
   name: html-frontend
+  namespace: default
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      run: html-frontend
   template:
     metadata:
       labels:
-        app: html-frontend
+        run: html-frontend
     spec:
       containers:
-      - name: html-frontend
-        image: html-frontend:1.0
+      - image: html-frontend:1.4
+        name: html-frontend
         ports:
         - containerPort: 80
+          protocol: TCP

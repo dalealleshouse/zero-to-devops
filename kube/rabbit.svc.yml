@@ -1,16 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: queue
   labels:
-    app: queue
+    run: queue
+  name: queue
+  namespace: default
 spec:
- ports:
- - port: 15672 
-   protocol: TCP
-   name: management
- - port: 5672 
-   protocol: TCP
-   name: queue
- selector:
-   app: queue
+  ports:
+  - name: port-1
+    port: 15672
+    protocol: TCP
+    targetPort: 15672
+  - name: port-2
+    port: 5672
+    protocol: TCP
+    targetPort: 5672
+  selector:
+    run: queue
+  type: ClusterIP

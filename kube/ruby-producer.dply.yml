@@ -1,16 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  generation: 1
+  labels:
+    run: ruby-producer
   name: ruby-producer
+  namespace: default
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      run: ruby-producer
   template:
     metadata:
       labels:
-        app: ruby-producer
+        run: ruby-producer
     spec:
       containers:
-      - name: ruby-producer
-        image: ruby-producer:1.0
-        ports:
-        - containerPort: 80
+      - image: ruby-producer:1.0
+        name: ruby-producer

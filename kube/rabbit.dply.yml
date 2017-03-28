@@ -1,17 +1,20 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    run: queue
   name: queue
+  namespace: default
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      run: queue
   template:
     metadata:
       labels:
-        app: queue
+        run: queue
     spec:
       containers:
-      - name: rabbit
-        image: rabbitmq:3.6.6-management
-        ports:
-        - containerPort: 15672
-        - containerPort: 5672
+      - image: rabbitmq:3.6.6-management
+        name: queue
