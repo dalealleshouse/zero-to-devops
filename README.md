@@ -177,7 +177,7 @@ docker pull rabbitmq:3.6.6-management
 With all the requisite setup out of the way, it's time to start the actual demo.
 The image below outlines the system we are going to host on K8S.
 
-![Demo System](/demo-sys.png)
+![Demo System](/demo-sys.PNG)
 
 
 
