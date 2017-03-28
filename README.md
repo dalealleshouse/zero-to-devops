@@ -133,10 +133,12 @@ traffic. First obtain the Minikube IP address.
 minikube ip
 ```
 
-Add these entries to your hosts file
+Add these entries to your hosts file:
 
+```
 *MINIKUBE_IP* demo.com
 *MINIKUBE_IP* status.demo.com
+```
 
 Make sure to remove these after the demo in case you ever want to visit the
 actual demo.com website.
