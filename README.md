@@ -8,8 +8,8 @@ This repo contains the code presented in the talk. Slides available
 The benefits of containerization cannot be overstated. Tools like Docker have
 made working with containers easy, efficient, and even enjoyable. However,
 management at scale is still a considerable task. That's why there's
-Kubernetes.  Come see how easy it is to create a manageable container
-environment. Live on stage (demo gods willing) you'll witness a full Kubernetes
+Kubernetes (K8S).  Come see how easy it is to create a manageable container
+environment. Live on stage (demo gods willing) you'll witness a full K8S
 configuration. In less than an hour, we'll build an environment capable of:
 Automatic Binpacking, Instant Scalability, Self-healing, Rolling Deployments,
 and Service Discovery/Load Balancing.
@@ -22,7 +22,7 @@ and Service Discovery/Load Balancing.
 
 ## Kubernetes Cluster
 
-In order to run the demo, you must have a Kubernetes cluster and configure
+In order to run the demo, you must have a K8S cluster and configure
 kubectl to point to it. Creating a cluster is easy with all three of the major
 cloud providers.
 
@@ -38,17 +38,17 @@ lightweight option for presentation purposes only.
 
 ## Minikube
 
-[Minikube](https://github.com/kubernetes/minikube) is a single-node kubernetes
-cluster that runs inside a virtual machine intended for development use and
-testing only. It's a great option for presentations (like this one) because it
-provides a means to work with kubernetes locally without an internet
-connection. Yes, believe it or not, internet connectivity is a bit capricious
-at conferences and meet ups.
+[Minikube](https://github.com/kubernetes/minikube) is a single-node K8S cluster
+that runs inside a virtual machine intended for development use and testing
+only. It's a great option for presentations (like this one) because it provides
+a means to work with K8S locally without an internet connection. Yes, believe
+it or not, internet connectivity is a bit capricious at conferences and meet
+ups.
 
 The demo should work fine on Mac or Linux. However, it hasn't been tested. I
 used a Windows 10 machine and Powershell, which required  special minikube
-configuration. It's doubtful that this will work on older windows machines.
-However, if you are able to get it working, add information about your
+configuration. It's doubtful that this will work on older windows machines at
+all.  However, if you are able to get it working, add information about your
 experience and I'll happily accept a pull request.
 
 Special Windows 10 minikube configuration:
@@ -69,6 +69,7 @@ Special Windows 10 minikube configuration:
   - Run the command below
 
 ``` powershell
+# add this to your profile for a permanent mapping
 New-Alias minikube *PATH-TO-MINIKUBE-EXE* 
 ```
 
@@ -82,18 +83,63 @@ minikube --vm-driver=hyperv --hyperv-virtual-switch=minikube start
 Verify everything is configured correctly with the following command.
 
 ``` powershell 
-kubectl cluster-info 
+kubectl get cs
 ```
 
 It should produce output such as the following:
 
 ``` powershell
-Kubernetes master is running at https://*YOUR-IP*:8443
-KubeDNS is running at https://*YOUR-IP*:8443/api/v1/proxy/namespaces/kube-system/services/kube-dns
-kubernetes-dashboard is running at https://*YOUR-IP*:8443/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok
+scheduler            Healthy   ok
+etcd-0               Healthy   {"health": "true"}
+```
+## Minikube Ingress
+
+Applications running in K8S are *firewalled* from external traffic by default.
+In order to make them externally accessible, it is necessary to expose them
+using services.  Most cloud providers offer a convenient means of connecting an
+external load balancer with a static IP to a service. However, this isn't an
+option with Minikube.  Without this convince, the demo is relegated to exposing
+services via node ports. In order to map the node ports to an address that will
+not change, we are going to use an Ingress. An ingress is a set of rules that
+allow inbound connections to reach K8S services.
+
+First, enable the Minikube ingress addon with the following command.
+
+``` powershell
+minikube addons open ingress
 ```
 
-TODO: kubectl get cs
+This creates an NGINX ingress controller. Next, create the K8S ingress object
+that contains all the ingress rules. Use the following command.
+
+``` powershell
+kubectl create -f *PATH_TO_INGRESS.YML*
+```
+
+The ingress.yml file is located in the kube directory of this project. Verify
+the ingress was created correctly with the following command.
+
+``` powershell
+kubectl describe ing
+```
+
+The ingress is expecting traffic from demo.com and status.demo.com. In order to
+route traffic accordingly, you will need to update your hosts file to route
+traffic. First obtain the Minikube IP address.
+
+``` powershell
+minikube ip
+```
+
+Add these entries to your hosts file
+
+*MINIKUBE_IP* demo.com
+*MINIKUBE_IP* status.demo.com
+
+Make sure to remove these after the demo in case you ever want to visit the
+actual demo.com website.
 
 ## Image Registry
 
