@@ -63,9 +63,10 @@ experience and I'll happily accept a pull request.
 
 Special Windows 10 minikube configuration:
 
-- Configure HyperV (If you are able to run Docker, it should be)
+- Enable HyperV (If you are able to run Docker, it should be)
 - Create a Virtual Switch in Hyper-V:
-  - Open Hyper-V Manager Select Virtual Switch Manager
+  - Open Hyper-V Manager
+  - Select Virtual Switch Manager
   - Select the "Internal" switch type
   - Click the "Create Virtual Switch" button
   - Name the switch "minikube"
@@ -110,21 +111,17 @@ etcd-0               Healthy   {"health": "true"}
 ## Ingress
 
 The demo employs an [ingress](https://kubernetes.io/docs/user-guide/ingress/)
-to route incoming cluster traffic to desired K8S services. If you're already
-familiar with ingresses, feel free to skip the next couple paragraphs. The
-terms *service* and *pod* are used frequently.  Don't worry if you don't
-understand these concepts yet, they are covered in the demo.
+to route incoming cluster traffic to desired K8S services.  The terms *service*
+and *pod* are used frequently.  Don't worry if you don't understand these
+concepts yet, they are covered in the demo.
 
 An ingress is a set of rules that allow inbound connections to reach K8S
 services. In K8S, an ingress has two components: an ingress resource and an
-ingress controller.
-
-An ingress resource is a K8S object that defines routing rules. The one used
-for this demo is located ![here](/kube/ingress.yml).
-
-An ingress controller is a daemon that runs as a K8S pod (similar to a
-container). It is responsible for watching the ingress resource and satisfying
-requests to the ingress. In short, it's special load balancer.
+ingress controller. An ingress resource is a K8S object that defines routing
+rules. The one used for this demo is located [here](/kube/ingress.yml). An
+ingress controller is a daemon that runs as a K8S pod (similar to a container).
+It is responsible for watching the ingress resource and satisfying requests to
+the ingress. In short, it's special load balancer.
 
 In cloud scenarios, you may be required to supply your own ingress controller
 using something like NGINX or Traefik. Minikube comes with a preconfigured NGIX
