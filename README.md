@@ -213,7 +213,7 @@ The demo system consists of five separate applications that work together.
 1. Java Consumer pulls messages from the queue one at a time and generates
    Fibonacci numbers in order to simulate CPU bound work
    
-## Pods
+## Deployments
 
 The K8S [*Pod*](https://kubernetes.io/docs/user-guide/pods/) object represents
 a group of one or more containers that act as a single logical unit. The demo
@@ -319,7 +319,7 @@ for every subsequent request.
 ## Self Healing
 
 Replica controllers automatically add new pods when scaling up.  Likewise, they
-also generate a new pod when one goes down. See the commands below.
+generate a new pod when one goes down. See the commands below.
 
 ``` powershell
 # point to the docker daemon on the minikube machine 
