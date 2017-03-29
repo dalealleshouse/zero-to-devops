@@ -147,8 +147,8 @@ kubectl describe ing
 
 The astute reader will notice that the ingress rules are routing traffic from
 demo.com and status.demo.com. For demo purposes, we are going to update our
-hosts file to map those domains to the IP address of the cluster. First, we
-need the IP address of the cluster.
+hosts file to map those domains to the IP address of the cluster. The command
+below will reveal the Minikube address.
 
 ``` powershell
 minikube ip
@@ -157,8 +157,8 @@ minikube ip
 Add the entries below to your hosts file. Make sure to use the IP address from
 the above command. In case you need it, here are instructing for updating the
 hosts file on
-![windows](https://support.rackspace.com/how-to/modify-your-hosts-file/) and
-![mac](http://www.imore.com/how-edit-your-macs-hosts-file-and-why-you-would-want)
+[windows](https://support.rackspace.com/how-to/modify-your-hosts-file/) and
+[mac](http://www.imore.com/how-edit-your-macs-hosts-file-and-why-you-would-want)
 
 
 ```
