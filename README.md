@@ -299,24 +299,14 @@ page served up from the NGINX pod.
 
 
 
-Ignore everything under this line...
+## Ignore everything under this line...
 
-----------------------
-Now we can scale
+```
 kubectl scale deployment html-frontend --replicas=3
-
-The replica set will watch the pods and keep them running.
 
 docker ps --filter name=html-frontend
 docker rm -f *CONTAINER*
 docker ps --filter name=html-frontend
-
-See how machine name changes
-
-Before beginning, as explained above, you should have a kubernetes cluster
-running and kubectl configured to point to it. Additionally, all the five
-container images should either be locally available on your cluster or the
-cluster should have access to download them.
 
 kubectl set image deployment/html-frontend html-frontend=html-frontend:2.0
 kubectl scale deployment java-consumer --replicas=10
@@ -325,7 +315,7 @@ kubectl config use-context minikube
 
 minikube addons enable heapster
 minikube addons open heapster
-
+```
 
 1. High level overview of Kubernetes
     - Node layout
@@ -342,15 +332,3 @@ minikube addons open heapster
         - Internal
     - Auto Scaling
     - Monitoring
-
-Applications running in K8S are *firewalled* from external traffic by default.
-In order to make them externally accessible, it is necessary to expose them
-using services. Most cloud providers offer a convenient means of connecting an
-external load balancer to a service. However, this isn't an option with
-Minikube. Without this convince, the demo is relegated to exposing services
-via node ports. Each service is exposed via a particular port on the cluster.
-
-
-If you are using a cloud based K8S cluster, you can either use the NodePort
-services as shown in this demo, or use standard load balancer services. Either
-way, the addresses will be different.
