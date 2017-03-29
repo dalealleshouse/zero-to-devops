@@ -312,9 +312,15 @@ After the service has time to register the change, it will automatically round
 robin load balance requests. Notice the name of the pod on the web page changes
 for every subsequent request.
 
+## Self Healing
 
+## Rolling Deployment/Rollback
 
+## Auto Scaling
 
+## Infrastructure as Code
+
+## Dashboard/Monitoring
 
 ## Ignore everything under this line...
 
@@ -344,8 +350,5 @@ minikube addons open heapster
     - Deployments
         - Health Checks
         - Rolling Deployments
-    - Services
-        - External
-        - Internal
     - Auto Scaling
     - Monitoring
