@@ -107,46 +107,62 @@ controller-manager   Healthy   ok
 scheduler            Healthy   ok
 etcd-0               Healthy   {"health": "true"}
 ```
-## Minikube Ingress
+## Ingress
 
-Applications running in K8S are *firewalled* from external traffic by default.
-In order to make them externally accessible, it is necessary to expose them
-using services.  Most cloud providers offer a convenient means of connecting an
-external load balancer with a static IP to a service. However, this isn't an
-option with Minikube.  Without this convince, the demo is relegated to exposing
-services via node ports. In order to map the node ports to an address that will
-not change, we are going to use an Ingress. An ingress is a set of rules that
-allow inbound connections to reach K8S services.
+The demo employs an ![ingress](https://kubernetes.io/docs/user-guide/ingress/)
+to route incoming cluster traffic to desired K8S services. If you're already
+familiar with ingresses, feel free to skip the next couple paragraphs. The
+terms *service* and *pod* are used frequently.  Don't worry if you don't
+understand these concepts yet, they are covered in the demo.
 
-First, enable the Minikube ingress addon with the following command.
+An ingress is a set of rules that allow inbound connections to reach K8S
+services. In K8S, an ingress has two components: an ingress resource and an
+ingress controller.
+
+An ingress resource is a K8S object that defines routing rules. The one used
+for this demo is located ![here](/kube/ingress.yml).
+
+An ingress controller is a daemon that runs as a K8S pod (similar to a
+container). It is responsible for watching the ingress resource and satisfying
+requests to the ingress. In short, it's special load balancer.
+
+In cloud scenarios, you may be required to supply your own ingress controller
+using something like NGINX or Traefik. Minikube comes with a preconfigured NGIX
+ingress controller. Use the following command to enable it.
 
 ``` powershell
-minikube addons open ingress
+minikube addons enable ingress
 ```
 
-This creates an NGINX ingress controller. Next, create the K8S ingress object
-that contains all the ingress rules. Use the following command.
+Next, create the K8S ingress resource. Assuming you are in this project's root
+directory, run the following command.
 
 ``` powershell
-kubectl create -f *PATH_TO_INGRESS.YML*
+kubectl create -f .\kube\ingress.yml
 ```
 
-The ingress.yml file is located in the kube directory of this project. Verify
-the ingress was created correctly with the following command.
+Barring any errors, the command below should display information about the
+ingress you just created.
 
 ``` powershell
 kubectl describe ing
 ```
 
-The ingress is expecting traffic from demo.com and status.demo.com. In order to
-route traffic accordingly, you will need to update your hosts file. First
-obtain the Minikube IP address.
+The astute reader will notice that the ingress rules are routing traffic from
+demo.com and status.demo.com. For demo purposes, we are going to update our
+hosts file to map those domains to the IP address of the cluster. First, we
+need the IP address of the cluster.
 
 ``` powershell
 minikube ip
 ```
 
-Add these entries to your hosts file:
+Add the entries below to your hosts file. Make sure to use the IP address from
+the above command. In case you need it, here are instructing for updating the
+hosts file on
+![windows](https://support.rackspace.com/how-to/modify-your-hosts-file/) and
+![mac](http://www.imore.com/how-edit-your-macs-hosts-file-and-why-you-would-want)
+
 
 ```
 *MINIKUBE_IP* demo.com
@@ -302,3 +318,15 @@ minikube addons open heapster
         - Internal
     - Auto Scaling
     - Monitoring
+
+Applications running in K8S are *firewalled* from external traffic by default.
+In order to make them externally accessible, it is necessary to expose them
+using services. Most cloud providers offer a convenient means of connecting an
+external load balancer to a service. However, this isn't an option with
+Minikube. Without this convince, the demo is relegated to exposing services
+via node ports. Each service is exposed via a particular port on the cluster.
+
+
+If you are using a cloud based K8S cluster, you can either use the NodePort
+services as shown in this demo, or use standard load balancer services. Either
+way, the addresses will be different.
