@@ -212,6 +212,8 @@ The demo system consists of five separate applications that work together.
    second
 1. Java Consumer pulls messages from the queue one at a time and generates
    Fibonacci numbers in order to simulate CPU bound work
+   
+## Pods
 
 The K8S [*Pod*](https://kubernetes.io/docs/user-guide/pods/) object represents
 a group of one or more containers that act as a single logical unit. The demo
@@ -250,6 +252,8 @@ with exec or view stdout using log.
 kubectl exec -it *POD_NAME* bash
 kubectl logs *POD_NAME*
 ```
+
+## Services
 
 Viewing the logs of the ruby producer reveals that it unable to connect to the
 queue. Each pod has an IP address that is reachable inside the K8S cluster. One
