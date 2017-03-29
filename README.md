@@ -213,9 +213,9 @@ The demo system consists of five separate applications that work together.
 1. Java Consumer pulls messages from the queue one at a time and generates
    Fibonacci numbers in order to simulate CPU bound work
 
-The K8S [*pod*](https://kubernetes.io/docs/user-guide/pods/) object represents
+The K8S [*Pod*](https://kubernetes.io/docs/user-guide/pods/) object represents
 a group of one or more containers that act as a single logical unit. The demo
-consists of five individual containers that act autonomously so each *pod* has
+consists of five individual containers that act autonomously so each *Pod* has
 a single container.
 
 A K8S [*Replica Set*](https://kubernetes.io/docs/user-guide/replicasets/)
