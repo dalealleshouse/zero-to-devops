@@ -231,8 +231,8 @@ Verify the objects were created correctly with the following command.
 
 ``` powershell
 kubectl get deployments
-kubectl get pods
 kubectl get rs
+kubectl get pods
 ```
 
 Each pod represents a Docker container running somewhere on the K8S cluster.
@@ -245,29 +245,53 @@ kubectl exec -it *POD_NAME* bash
 kubectl logs *POD_NAME*
 ```
 
-If you view the logs of the ruby producer, you will notice that it unable to
-connect to the queue. This is because by default, pods are exposed via an IP
-address that may change. A K8S service provides a durable address that will
-route traffic to the specified pods. The command below create a service that
-exposes ports for the queue pod.
+Viewing the logs of the ruby producer reveals that it unable to connect to the
+queue. Each pod has an IP address that is reachable inside the K8S cluster. One
+could simply determine the IP address of the queue and update the ruby
+producer. However, the address is ephemeral.  If the pod dies and is
+regenerated the IP address will change. K8S services provide a durable endpoint
+for pods. The command below creates a *Cluster IP* service and exposes ports
+for the queue pod.
 
 ``` powershell
 kubectl expose deployment queue --port=15672,5672 --name=queue
 ```
 
-Now, if you view the logs from the ruby producer, you should see that it
-connected the queue and is sending messages. The underlying pod can change,
-containers can be created, destroyed, moved to different nodes and the service
-will be able to route traffic to them.
+It may take a minute or two, but inspecting the logs from the ruby producer pod
+should show that the service is now sending messages to the queue. *Cluster IP*
+services enable inner-cluster communication.
 
-With the queue in place, we still need to expose the nginx and status-api pods
-to external traffic
+Applications running in K8S are firewalled from external traffic by default.
+This includes *Cluster IP* services.  In order to expose pods externally, it is
+necessary to create either a *Node Port* or *Load Balancer* service.  As the
+names imply, a *Node Port* service connects a port on the cluster to a pod and
+a *Load Balancer* service connects an external load balancer to a pod. Most
+cloud providers offer a convenient means of creating *Load Balancer* services.
+However, this isn't an option with Minikube. Therefore, the demo employs *Node
+Port* services.
 
+The commands below create *Node Port* services for the NGINX and REST API pods. 
 
 ``` powershell
 kubectl expose deployment html-frontend --port=80 --name=html-frontend --type=NodePort
 kubectl expose deployment status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
 ```
+
+To ensure the services were created correctly, run the command below.
+
+``` powershell
+kubectl get services
+```
+
+If everything is configured correctly, navigating to demo.com will display the
+page served up from the NGINX pod.
+
+
+
+
+
+
+
 
 Ignore everything under this line...
 
