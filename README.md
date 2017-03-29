@@ -123,7 +123,7 @@ ingress controller is a daemon that runs as a K8S pod (similar to a container).
 It is responsible for watching the ingress resource and satisfying requests to
 the ingress. In short, it's special load balancer.
 
-In cloud scenarios, you may be required to supply your own ingress controller
+In typical scenarios, you may be required to supply your own ingress controller
 using something like NGINX or Traefik. Minikube comes with a preconfigured NGIX
 [ingress controller](https://github.com/kubernetes/minikube/tree/master/deploy/addons/ingress). Use the following command to enable it.
 
@@ -171,18 +171,15 @@ actual demo.com website.
 
 ## Image Registry
 
-Ideally, all images should reside in a private registry. This isn't a viable
-option for the demo because reliable internet access isn't guaranteed. It is
-possible to create a local docker registry but the complexity surrounding
-security distracts from the demo's purpose. Therefore, the commands below build
-all containers using the docker daemon on the minikube machine. If you are
-trying to reproduce the demo, I recommend using docker hub (or something
-equivalent), pushing images there, and allowing Kubernetes to pull them.
+Using an external Docker registry isn't a viable option for the demo because
+internet access isn't guaranteed. It is possible to create a local docker
+registry but the complexity surrounding security distracts from the purpose.
+Therefore, we are going to manually build (in advance) the demo containers
+using Minikube's docker daemon. With the containers already available locally,
+K8S will not attempt to download them. Navigate to the project directory and
+run the commands below.
 
 ``` powershell
-git clone https://github.com/dalealleshouse/zero-to-devops.git
-cd zero-to-devops
-
 # point to the docker daemon on the minikube machine 
 # eval $(minikube docker-env) on Mac/Linux 
 & minikube docker-env | Invoke-Expression
@@ -193,7 +190,7 @@ docker build --tag=ruby-producer:1.0 ruby-producer/
 docker build --tag=status-api:1.0 status-api/
 docker pull rabbitmq:3.6.6-management
 
-# point to the local docker daemon
+# point back to the local docker daemon
 # eval $(minikube docker-env -u) on Mac/Linux 
 & minikube docker-env -u | Invoke-Expression
 ```
