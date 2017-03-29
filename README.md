@@ -222,9 +222,9 @@ A K8S [*Replica Set*](https://kubernetes.io/docs/user-guide/replicasets/)
 specifies the number of desired pod replicas. K8S continually monitors *Replica
 Sets* and adjusts the number of replicas accordingly.
 
-A K8S [*Deployment*](https://kubernetes.io/docs/user-guide/deployments/) is a 
-higher level object that defines both *Pod*s and *Replica Set*s. The commands
-below create *Deployment*s for each container in the demo system.
+A K8S [*Deployment*](https://kubernetes.io/docs/user-guide/deployments/) is a
+higher level object that encompasses both *Pod*s and *Replica Set*s. The
+commands below create *Deployment*s for each container in the demo system.
 
 ``` powershell
 kubectl run html-frontend --image=html-frontend:1.0 --port=80
