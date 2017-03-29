@@ -213,10 +213,18 @@ The demo system consists of five separate applications that work together.
 1. Java Consumer pulls messages from the queue one at a time and generates
    Fibonacci numbers in order to simulate CPU bound work
 
-The first thing to do is get each container running in K8s. For this, we'll
-create deployments. K8S deployments package *pods* and *replica sets*. A pod is
-one or more containers that share context and act as a single autonomous unit.
-Aptly named, replica sets specify the number of desired replicas.
+The K8S [*pod*](https://kubernetes.io/docs/user-guide/pods/) object represents
+a group of one or more containers that act as a single logical unit. The demo
+consists of five individual containers that act autonomously so each *pod* has
+a single container.
+
+A K8S [*Replica Set*](https://kubernetes.io/docs/user-guide/replicasets/)
+specifies the number of desired pod replicas. K8S continually monitors *Replica
+Sets* and adjusts the number of replicas accordingly.
+
+A K8S [*Deployment*](https://kubernetes.io/docs/user-guide/deployments/) is a 
+higher level object that defines both *Pod*s and *Replica Set*s. The commands
+below create *Deployment*s for each container in the demo system.
 
 ``` powershell
 kubectl run html-frontend --image=html-frontend:1.0 --port=80
