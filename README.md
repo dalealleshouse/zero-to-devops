@@ -195,7 +195,7 @@ docker pull rabbitmq:3.6.6-management
 & minikube docker-env -u | Invoke-Expression
 ```
 
-## Demo
+## Demo System
 
 With all the requisite setup out of the way, it's time to start the actual
 demo. The image below outlines the system we are going to host on K8S.
@@ -292,8 +292,25 @@ kubectl get services
 If everything is configured correctly, navigating to demo.com will display the
 page served up from the NGINX pod.
 
+## Scaling
 
+Increasing the number of pod replicas on a deployment is as easy as running the
+command below.
 
+``` powershell
+kubectl scale deployment html-frontend --replicas=3
+```
+
+Running this command reveals that the three requested replicas are already up
+and running.
+
+``` powershell
+kubectl get pods -l run=html-frontend
+```
+
+After the service has time to register the change, it will automatically round
+robin load balance requests. Notice the name of the pod on the web page changes
+for every subsequent request.
 
 
 
