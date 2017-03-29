@@ -125,7 +125,7 @@ the ingress. In short, it's special load balancer.
 
 In cloud scenarios, you may be required to supply your own ingress controller
 using something like NGINX or Traefik. Minikube comes with a preconfigured NGIX
-ingress controller. Use the following command to enable it.
+[ingress controller](https://github.com/kubernetes/minikube/tree/master/deploy/addons/ingress). Use the following command to enable it.
 
 ``` powershell
 minikube addons enable ingress
