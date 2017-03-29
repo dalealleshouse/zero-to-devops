@@ -198,7 +198,7 @@ docker pull rabbitmq:3.6.6-management
 ## Demo
 
 With all the requisite setup out of the way, it's time to start the actual
-demo.  The image below outlines the system we are going to host on K8S.
+demo. The image below outlines the system we are going to host on K8S.
 
 ![Demo System](/demo-sys.PNG)
 
@@ -213,11 +213,10 @@ The demo system consists of five separate applications that work together.
 1. Java Consumer pulls messages from the queue one at a time and generates
    Fibonacci numbers in order to simulate CPU bound work
 
-The first thing to do is get each Dockerized application running in K8s. For
-this, we'll create deployments. K8S deployments package *pods* and *replica
-sets*. A pod is one or more containers that share context and act as a single
-autonomous unit. Aptly named, replica sets specify the number of desired
-replicas.
+The first thing to do is get each container running in K8s. For this, we'll
+create deployments. K8S deployments package *pods* and *replica sets*. A pod is
+one or more containers that share context and act as a single autonomous unit.
+Aptly named, replica sets specify the number of desired replicas.
 
 ``` powershell
 kubectl run html-frontend --image=html-frontend:1.0 --port=80
@@ -235,10 +234,9 @@ kubectl get rs
 kubectl get pods
 ```
 
-Each pod represents a Docker container running somewhere on the K8S cluster.
-kubectrl mirrors several Docker commands so the pods can be manipulated
-directly. For instance, you can obtain direct access to a pod with an exec
-command or view the output from stdout using a log command.
+Each pod represents a container running on the K8S cluster.  kubectrl mirrors
+several Docker commands. For instance, you can obtain direct access to a pod
+with exec or view stdout using log.
 
 ``` powershell
 kubectl exec -it *POD_NAME* bash
