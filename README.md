@@ -1,30 +1,40 @@
 # Zero to DevOps in Under an Hour with Kubernetes 
 
-This repo contains the code presented in the talk. Slides available
-[here](http://slides.com/dalealleshouse/kube)
+This repo contains the demo code presented in the Zero to DevOps talk. Slides
+available [here](http://slides.com/dalealleshouse/kube)
 
 ## Abstract
 
 The benefits of containerization cannot be overstated. Tools like Docker have
 made working with containers easy, efficient, and even enjoyable. However,
-management at scale is still a considerable task. That's why there's
-Kubernetes (K8S).  Come see how easy it is to create a manageable container
-environment. Live on stage (demo gods willing) you'll witness a full K8S
-configuration. In less than an hour, we'll build an environment capable of:
-Automatic Binpacking, Instant Scalability, Self-healing, Rolling Deployments,
-and Service Discovery/Load Balancing.
+management at scale is still a considerable task. That's why there's Kubernetes
+(K8S).  Come see how easy it is to create a manageable container environment.
+Live on stage (demo gods willing), you'll witness a full K8S configuration. In
+less than an hour, we'll build an environment capable of: Automatic Binpacking,
+Instant Scalability, Self-healing, Rolling Deployments, and Service
+Discovery/Load Balancing.
 
 ## Prerequisites
+
+All of the following software must be installed in order to run this demo.
 
 1) [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 1) [Docker](https://www.docker.com/community-edition)
 1) [kubectl](https://kubernetes.io/docs/tasks/kubectl/install/)
 
+## Clone the Repo
+
+Although it most likely goes without saying, the first thing you need to do is
+clone this repo.
+
+``` powershell
+git clone https://github.com/dalealleshouse/zero-to-devops.git
+```
+
 ## Kubernetes Cluster
 
-In order to run the demo, you must have a K8S cluster and configure
-kubectl to point to it. Creating a cluster is easy with all three of the major
-cloud providers.
+In order to run the demo, you must have a K8S cluster. Creating a cluster is
+easy with all three of the major cloud providers.
 
 - [Google Cloud](https://cloud.google.com/container-engine/docs/quickstart)
 - [Azure](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough)
@@ -34,7 +44,7 @@ There are also many other options for running virtually anywhere, including on
 premise: [Kubernetes](https://kubernetes.io/docs/getting-started-guides/)
 
 The demo utilizes [Minikube](https://github.com/kubernetes/minikube) as a
-lightweight option for presentation purposes only.
+lightweight option for demo purposes only.
 
 ## Minikube
 
@@ -56,24 +66,27 @@ Special Windows 10 minikube configuration:
 - Configure HyperV (If you are able to run Docker, it should be)
 - Create a Virtual Switch in Hyper-V:
   - Open Hyper-V Manager Select Virtual Switch Manager
-  - Select the "Internal" switch type Click the "Create Virtual Switch" button
-  - Name the switch "minikube" Close Virtual Switch Manager and Hyper-V Manager
+  - Select the "Internal" switch type
+  - Click the "Create Virtual Switch" button
+  - Name the switch "minikube"
+  - Close Virtual Switch Manager and Hyper-V Manager
 - Expose the Virtual Switch
   - Click the Windows Button and type "View Network Connection", open it
   - Right click on your network connection and select "Properties"
-  - On the Sharing Tab, Select "Allow other network users to connect through .."
-  - Select "vEthernet (minikube)" from the drop down list Click OK and close Network Connections
+  - On the Sharing Tab, Select "Allow other network users to connect through ..."
+  - Select "vEthernet (minikube)" from the drop down list
+  - Click OK and close Network Connections
 - Path minikube
   - Download [minikube](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
   - Save the file in an easily accessible path
   - Run the command below
 
 ``` powershell
-# add this to your profile for a permanent mapping
+# add this to your profile to make it permanent
 New-Alias minikube *PATH-TO-MINIKUBE-EXE* 
 ```
 
-Start minikube which will automatically configures kubectl. This requires
+Start minikube which will automatically configure kubectl. This requires
 opening Powershell in administration mode.
 
 ``` powershell
