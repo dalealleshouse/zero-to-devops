@@ -314,6 +314,26 @@ for every subsequent request.
 
 ## Self Healing
 
+Replica controllers automatically add new pods when scaling up.  Likewise, they
+also generate a new pod when one goes down. See the commands below.
+
+``` powershell
+# point to the docker daemon on the minikube machine 
+# eval $(minikube docker-env) on Mac/Linux 
+& minikube docker-env | Invoke-Expression
+
+# View the html-frontend pods
+docker ps -f label=io.kubernetes.container.name=html-frontend
+
+# Forcibly shut down container to simulate a node\pod failure
+docker rm -f *CONTAINER*
+
+# Containers are regenerated immediately
+docker ps -f label=io.kubernetes.container.name=html-frontend
+```
+
+
+
 ## Rolling Deployment/Rollback
 
 ## Auto Scaling
