@@ -309,7 +309,7 @@ project folder.
 To delete every object from the demo, use the following command:
 
 ``` powershell
-kubectl delete -f kubectl delete -f .\kube\
+kubectl delete -f .\kube\
 ```
 
 Every object in K8S is gone. It's easy to recreate everything with the
