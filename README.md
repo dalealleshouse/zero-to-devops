@@ -298,13 +298,13 @@ page served up from the NGINX pod.
 
 ## Infrastructure as Code
 
-Although the commands above are sufficient, there are many advantages to
-storing infrastructure as code. Keeping system configuration in source control
-makes it easy to examine and allows for instant regeneration on different
-hardware. Additionally, it affords the ability to view changes over time.
-There is no down side to it. K8S supports creating/removing/altering objects
-from yaml files. All the deployments and services for this demo are in the kube
-project folder.
+Although the object creation commands introduced above are sufficient, there
+are many advantages to storing infrastructure as code. Keeping system
+configuration in source control makes it easy to examine and allows for instant
+regeneration on different hardware. Additionally, it affords the ability to
+view changes over time.  There is no down side to it. K8S supports
+creating/removing/altering objects from yaml files. All the deployments and
+services for this demo are in the kube project folder.
 
 To delete every object from the demo, use the following command:
 
@@ -312,15 +312,14 @@ To delete every object from the demo, use the following command:
 kubectl delete -f .\kube\
 ```
 
-Every object in K8S is gone. It's easy to recreate everything with the
-following command:
+It's easy to recreate everything with the following command:
 
 ``` powershell
 kubectl create -f .\kube\
 ```
 
 The commands above also work for individual files. A single object is updated
-with the following command.
+with the following command:
 
 ``` powershell
 kubectl replace -f .\kube\html-frontend.dply.yml
