@@ -185,6 +185,7 @@ run the commands below.
 & minikube docker-env | Invoke-Expression
 
 docker build --tag=html-frontend:1.0 html-frontend/
+docker build --tag=html-frontend:2.0 html-frontend-err/
 docker build --tag=java-consumer:1.0 java-consumer/ 
 docker build --tag=ruby-producer:1.0 ruby-producer/
 docker build --tag=status-api:1.0 status-api/
@@ -372,7 +373,25 @@ docker ps -f label=io.kubernetes.container.name=html-frontend
 
 ## Rolling Deployment/Rollback
 
+``` powershell
+kubectl set image deployment/html-frontend html-frontend=html-frontend:2.0
+kubectl rollout status deployment/html-frontend
+```
+
+``` powershell
+kubectl rollout history deployment/html-frontend
+
+kubectl rollout history deployment/html-frontend --revision=2
+```
+
+
+``` powershell
+kubectl rollout undo deployment/html-frontend --to-revision=2
+```
+
 ## Auto Scaling
+
+kubectl autoscale deployment nginx-deployment --min=10 --max=15 --cpu-percent=80
 
 ## Dashboard/Monitoring
 
