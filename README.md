@@ -379,12 +379,6 @@ docker ps -f label=io.kubernetes.container.name=html-frontend
 ## Ignore everything under this line...
 
 ```
-kubectl scale deployment html-frontend --replicas=3
-
-docker ps --filter name=html-frontend
-docker rm -f *CONTAINER*
-docker ps --filter name=html-frontend
-
 kubectl set image deployment/html-frontend html-frontend=html-frontend:2.0
 kubectl scale deployment java-consumer --replicas=10
 
