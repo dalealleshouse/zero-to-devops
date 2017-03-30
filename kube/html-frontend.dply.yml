@@ -21,3 +21,15 @@ spec:
         ports:
         - containerPort: 80
           protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz.html
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /healthz.html
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 2

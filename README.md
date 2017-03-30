@@ -67,16 +67,11 @@ Special Windows 10 minikube configuration:
 - Create a Virtual Switch in Hyper-V:
   - Open Hyper-V Manager
   - Select Virtual Switch Manager
-  - Select the "Internal" switch type
+  - Select the "External" switch type
+  - Select your network adapter
   - Click the "Create Virtual Switch" button
   - Name the switch "minikube"
   - Close Virtual Switch Manager and Hyper-V Manager
-- Expose the Virtual Switch
-  - Click the Windows Button and type "View Network Connection", open it
-  - Right click on your network connection and select "Properties"
-  - On the Sharing Tab, Select "Allow other network users to connect through ..."
-  - Select "vEthernet (minikube)" from the drop down list
-  - Click OK and close Network Connections
 - Path minikube
   - Download [minikube](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
   - Save the file in an easily accessible path
@@ -368,6 +363,57 @@ docker rm -f *CONTAINER*
 # Containers are regenerated immediately
 docker ps -f label=io.kubernetes.container.name=html-frontend
 ```
+
+Of course, it's not very often that a container just completely shuts down.
+That's why K8S provides liveness and readiness checks. Look at the bottom
+section of the [html-frontend deployment file](/kube/html-frontend.dpy.yml).
+The section of interest is shown below.
+
+``` yaml
+...
+        livenessProbe:
+          httpGet:
+            path: /healthz.html
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /healthz.html
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 2
+```
+
+This tells K8S to request healthz.html every 2 seconds and restart the pod upon
+a bad request. The following command simulate such a failure.
+
+```
+kubectl get pods
+
+# Get shell access to an html-frontend pod
+kubectl exec -it *POD_NAME* bash
+
+# inside the pod
+rm -rf usr/share/nginx/html/healthz.html
+exit
+
+# Back in Powershell, view the pods
+kubectl get pods
+```
+
+This should produce an output similar to below:
+
+``` powershell
+NAME                             READY     STATUS    RESTARTS   AGE
+html-frontend-1306390030-t1sqx   1/1       Running   1          12m
+...
+```
+
+Notice the pod is question has one restart. When the health check failed, K8S
+automatically killed the old container and stood a new one up. Likewise, if a
+readiness probe were to fail the pod would never be brought online which would
+stop any rolling updates in progress.
 
 
 
