@@ -325,8 +325,8 @@ with the following command:
 kubectl replace -f .\kube\html-frontend.dply.yml
 ```
 
-Working with configuration files stored in source control is the recommended
-way to work with K8S.
+Configuration files stored in source control is the recommended way to work
+with K8S.
 
 ## Scaling
 
