@@ -366,7 +366,7 @@ docker ps -f label=io.kubernetes.container.name=html-frontend
 
 Of course, it's not very often that a container just completely shuts down.
 That's why K8S provides liveness and readiness checks. Look at the bottom
-section of the [html-frontend deployment file](/kube/html-frontend.dpy.yml).
+section of the [html-frontend deployment file](/kube/html-frontend.dply.yml).
 The section of interest is shown below.
 
 ``` yaml
@@ -386,7 +386,7 @@ The section of interest is shown below.
 ```
 
 This tells K8S to request healthz.html every 2 seconds and restart the pod upon
-a bad request. The following command simulate such a failure.
+a bad request. The following commands simulate such a failure.
 
 ```
 kubectl get pods
@@ -419,20 +419,32 @@ stop any rolling updates in progress.
 
 ## Rolling Deployment/Rollback
 
+When K8S updates a deployment, it pulls one pod out of the system at a time,
+updates it, and waits till it's up before moving on to the next.  This ensures
+that users never experience an outage. The following command will update the
+html-frontend deployment container image.
+
 ``` powershell
 kubectl set image deployment/html-frontend html-frontend=html-frontend:2.0
-kubectl rollout status deployment/html-frontend
+kubectl get deployments 
 ```
+
+The output of the last command shows that the update was made almost instantly.
+Navigating to demo.com should show a significant error. Obviously, the 2.0
+image is flawed. Luckily, with K8S it's rolling back to the previous images is
+as easy as the following command:
+
+``` powershell
+kubectl rollout undo deployment/html-frontend
+```
+
+There are a few different options for rollbacks. The following commands display
+the roll out history of a deployment.  Putting a *--revision=#* behind the
+*rollout undo* command will roll back to specific version.
 
 ``` powershell
 kubectl rollout history deployment/html-frontend
-
-kubectl rollout history deployment/html-frontend --revision=2
-```
-
-
-``` powershell
-kubectl rollout undo deployment/html-frontend --to-revision=2
+kubectl rollout history deployment/html-frontend --revision=*REVISION_NUMBER*
 ```
 
 ## Auto Scaling
