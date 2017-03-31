@@ -81,8 +81,8 @@ Special Windows 10 minikube configuration:
 New-Alias minikube *PATH-TO-MINIKUBE-EXE* 
 ```
 
-Start minikube which will automatically configure kubectl. This requires
-opening Powershell in administration mode.
+All minikube commands require running Powershell as an Administrator. The
+command below will start minikube and configure kubectl.
 
 ``` powershell
 minikube --vm-driver=hyperv --hyperv-virtual-switch=minikube start 
@@ -94,7 +94,7 @@ Verify everything is configured correctly with the following command.
 kubectl get cs
 ```
 
-It should produce output such as the following:
+The output of the command above should match the following:
 
 ``` powershell
 NAME                 STATUS    MESSAGE              ERROR
