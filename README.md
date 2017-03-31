@@ -439,7 +439,7 @@ kubectl rollout undo deployment/html-frontend
 ```
 
 There are a few different options for rollbacks. The following commands display
-the roll out history of a deployment.  Putting a *--revision=#* behind the
+the roll out history of a deployment.  Putting a *--revision=#* after the
 *rollout undo* command will roll back to specific version.
 
 ``` powershell
@@ -449,17 +449,17 @@ kubectl rollout history deployment/html-frontend --revision=*REVISION_NUMBER*
 
 ## Auto Scaling
 
-kubectl autoscale deployment nginx-deployment --min=10 --max=15 --cpu-percent=80
+kubectl autoscale deployment java-consumer --min=1 --max=5 --cpu-percent=80
 
 ## Dashboard/Monitoring
 
 ## Other Cool Stuff
 
-- Resources Limits
-- QOS Requests
 - Secrets
 - Volumes
 - Stateful Sets
+- Resources Limits
+- QOS Requests
 
 ## Ignore everything under this line...
 
