@@ -453,6 +453,14 @@ kubectl autoscale deployment nginx-deployment --min=10 --max=15 --cpu-percent=80
 
 ## Dashboard/Monitoring
 
+## Other Cool Stuff
+
+- Resources Limits
+- QOS Requests
+- Secrets
+- Volumes
+- Stateful Sets
+
 ## Ignore everything under this line...
 
 ```
