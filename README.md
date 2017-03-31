@@ -102,6 +102,7 @@ controller-manager   Healthy   ok
 scheduler            Healthy   ok
 etcd-0               Healthy   {"health": "true"}
 ```
+
 ## Ingress
 
 The demo employs an [ingress](https://kubernetes.io/docs/user-guide/ingress/)
@@ -119,7 +120,9 @@ the ingress. In short, it's special load balancer.
 
 In typical scenarios, you may be required to supply your own ingress controller
 using something like NGINX or Traefik. Minikube comes with a preconfigured NGIX
-[ingress controller](https://github.com/kubernetes/minikube/tree/master/deploy/addons/ingress). Use the following command to enable it.
+[ingress
+controller](https://github.com/kubernetes/minikube/tree/master/deploy/addons/ingress).
+Use the following command to enable it.
 
 ``` powershell
 minikube addons enable ingress
