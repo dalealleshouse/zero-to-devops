@@ -49,16 +49,15 @@ lightweight option for demo purposes only.
 ## Minikube
 
 [Minikube](https://github.com/kubernetes/minikube) is a single-node K8S cluster
-that runs inside a virtual machine intended for development use and testing
-only. It's a great option for presentations (like this one) because it provides
-a means to work with K8S locally without an internet connection. Yes, believe
-it or not, internet connectivity is a bit capricious at conferences and meet
-ups.
+that runs inside a virtual machine intended for development use and testing.
+It's a great option for presentations (like this one) because it provides a
+means to work with K8S without an internet connection. Yes, believe it or not,
+internet connectivity is a bit capricious at conferences and meet ups.
 
-The demo should work fine on Mac or Linux. However, it hasn't been tested. I
-used a Windows 10 machine and Powershell, which required  special minikube
-configuration. It's doubtful that this will work on older windows machines at
-all.  However, if you are able to get it working, add information about your
+The demo should work fine on Mac, older Windows, or Linux. However, it hasn't
+been tested. These instruction apply specifically to Windows 10 and Powershell,
+which requires special minikube configuration. If you are able to get it
+working with a different OS or configuration, add information about your
 experience and I'll happily accept a pull request.
 
 Special Windows 10 minikube configuration:
@@ -68,8 +67,8 @@ Special Windows 10 minikube configuration:
   - Open Hyper-V Manager
   - Select Virtual Switch Manager
   - Select the "External" switch type
-  - Select your network adapter
   - Click the "Create Virtual Switch" button
+  - Select your network adapter from the drop down list under "External Network"
   - Name the switch "minikube"
   - Close Virtual Switch Manager and Hyper-V Manager
 - Path minikube
@@ -344,6 +343,10 @@ After the service has time to register the change, it will automatically round
 robin load balance requests. Notice the name of the pod on the web page changes
 for every subsequent request.
 
+``` powershell
+kubectl autoscale deployment java-consumer --min=1 --max=5 --cpu-percent=80
+```
+
 ## Self Healing
 
 Replica controllers automatically add new pods when scaling up.  Likewise, they
@@ -415,8 +418,6 @@ automatically killed the old container and stood a new one up. Likewise, if a
 readiness probe were to fail the pod would never be brought online which would
 stop any rolling updates in progress.
 
-
-
 ## Rolling Deployment/Rollback
 
 When K8S updates a deployment, it pulls one pod out of the system at a time,
@@ -446,10 +447,6 @@ the roll out history of a deployment.  Putting a *--revision=#* after the
 kubectl rollout history deployment/html-frontend
 kubectl rollout history deployment/html-frontend --revision=*REVISION_NUMBER*
 ```
-
-## Auto Scaling
-
-kubectl autoscale deployment java-consumer --min=1 --max=5 --cpu-percent=80
 
 ## Dashboard/Monitoring
 
