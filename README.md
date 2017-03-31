@@ -456,9 +456,6 @@ kubectl autoscale deployment nginx-deployment --min=10 --max=15 --cpu-percent=80
 ## Ignore everything under this line...
 
 ```
-kubectl set image deployment/html-frontend html-frontend=html-frontend:2.0
-kubectl scale deployment java-consumer --replicas=10
-
 kubectl config use-context minikube
 
 minikube addons enable heapster
@@ -472,8 +469,5 @@ minikube addons open heapster
     - Scheduler
         - Binpacking
 1. Demo
-    - Deployments
-        - Health Checks
-        - Rolling Deployments
     - Auto Scaling
     - Monitoring
