@@ -444,7 +444,7 @@ kubectl get pods
 kubectl exec *POD_NAME* rm usr/share/nginx/html/healthz.html
 ```
 
-Running 'kubectl get pods' again should produce an output similar to below:
+Running `kubectl get pods` again should produce an output similar to below:
 
 ``` powershell
 NAME                             READY     STATUS    RESTARTS   AGE
