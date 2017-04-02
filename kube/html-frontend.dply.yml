@@ -18,6 +18,9 @@ spec:
       containers:
       - image: html-frontend:1.0
         name: html-frontend
+        env:
+          - name: STATUS_HOST
+            value: status.demo.com
         ports:
         - containerPort: 80
           protocol: TCP

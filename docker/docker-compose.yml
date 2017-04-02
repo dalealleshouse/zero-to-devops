@@ -40,6 +40,8 @@ services:
       - status-api
     ports:
       - "80:80"
+    environment:
+      - STATUS_HOST=localhost:5000
     networks:
       - demo
 

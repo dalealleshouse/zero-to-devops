@@ -44,9 +44,9 @@ There are also many [other
 options](https://kubernetes.io/docs/getting-started-guides/) for running
 virtually anywhere, including on premise.
 
-The demo utilizes [Minikube](https://github.com/kubernetes/minikube) as a
-lightweight option for demo purposes only. For other cluster options, adjust
-the URL on line 49 of [html-frontend/index.html](/html-frontend/index.html).
+This demo utilizes [Minikube](https://github.com/kubernetes/minikube). For
+other cluster options, adjust the STATUS_HOST environment variable on line 23
+of the [html-frontend](/kube/html-frontend.dply.yml) deployment file.
 
 ## Minikube
 
