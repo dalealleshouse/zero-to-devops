@@ -454,7 +454,7 @@ html-frontend-1306390030-t1sqx   1/1       Running   1          12m
 
 Notice the pod is question has one restart. Likewise, navigating to the
 replication controller via the dashboard or, running `kubectl describe
-*POD_NAME*` will reveal a "Liveness Probe Failed" event. When the health check
+*POD_NAME*` will reveal a *Liveness Probe Failed* event. When the health check
 failed, K8S automatically killed the old container and stood a new one up.
 Likewise, if a readiness probe were to fail the pod would never be brought
 online which would stop any rolling updates in progress.
