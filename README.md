@@ -442,16 +442,17 @@ a bad request. The following commands simulate such a failure.
 ```
 kubectl get pods
 kubectl exec *POD_NAME* rm usr/share/nginx/html/healthz.html
-kubectl get pods
 ```
 
-This should produce an output similar to below:
+Running '''kubectl get pods''' command again should produce an output similar to below:
 
 ``` powershell
 NAME                             READY     STATUS    RESTARTS   AGE
 html-frontend-1306390030-t1sqx   1/1       Running   1          12m
 ...
 ```
+avigating to the replication controller via the dashboard or, using the kubectl
+describe on the pod command will reveal a "Liveness Probe Failed" event.
 
 Notice the pod is question has one restart. When the health check failed, K8S
 automatically killed the old container and stood a new one up. Likewise, if a
