@@ -61,9 +61,9 @@ There are also many [other
 options](https://kubernetes.io/docs/getting-started-guides/) for running
 virtually anywhere, including on premise.
 
-This demo utilizes [Minikube](https://github.com/kubernetes/minikube). For
-other cluster options, change the STATUS_HOST environment variable on line 23
-of the [html-frontend](/kube/html-frontend.dply.yml) deployment file.
+This demo utilizes [Minikube](https://github.com/kubernetes/minikube). Although
+it will run in other cluster environments, there will be minor configuration
+changes. These instructions apply specifically to Minikube.
 
 ## Minikube
 
