@@ -192,8 +192,9 @@ internet access isn't guaranteed. It is possible to create a [local docker
 registry](https://docs.docker.com/registry/deploying/) but the complexity
 surrounding security distracts from the purpose.  Therefore, we are going to
 manually build (in advance) the demo containers using Minikube's docker daemon.
-With the containers already available locally, K8S will not attempt to download
-them. Navigate to the project directory and run the commands below.
+During the on stage demonstration, the containers will be available locally.
+Therefore, K8S will not attempt to download them. Navigate to the project
+directory and run the commands below.
 
 ``` powershell
 # point to the docker daemon on the minikube machine 
