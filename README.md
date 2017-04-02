@@ -105,6 +105,24 @@ scheduler            Healthy   ok
 etcd-0               Healthy   {"health": "true"}
 ```
 
+## Demo System
+
+With all the requisite setup out of the way, it's time to start the actual
+demo. The image below outlines the system we are going to host on K8S.
+
+![Demo System](/demo-sys.PNG)
+
+The demo system consists of five separate applications that work together.
+
+1. NGINX serves a static HTML file to a browser
+1. ASP.NET Core REST API accepts requests from the browser and returns queue
+   stats
+1. RabbitMQ is configured as a standard work queue
+1. Ruby Producer pushes a message with a random number on the queue every
+   second
+1. Java Consumer pulls messages from the queue one at a time and generates
+   Fibonacci numbers in order to simulate CPU bound work
+
 ## Ingress
 
 The demo employs an [ingress](https://kubernetes.io/docs/user-guide/ingress/)
@@ -167,24 +185,6 @@ hosts file on
 
 Make sure to remove these after the demo in case you ever want to visit the
 actual demo.com website.
-
-## Demo System
-
-With all the requisite setup out of the way, it's time to start the actual
-demo. The image below outlines the system we are going to host on K8S.
-
-![Demo System](/demo-sys.PNG)
-
-The demo system consists of five separate applications that work together.
-
-1. NGINX serves a static HTML file to a browser
-1. ASP.NET Core REST API accepts requests from the browser and returns queue
-   stats
-1. RabbitMQ is configured as a standard work queue
-1. Ruby Producer pushes a message with a random number on the queue every
-   second
-1. Java Consumer pulls messages from the queue one at a time and generates
-   Fibonacci numbers in order to simulate CPU bound work
 
 ## Image Registry
 
