@@ -44,7 +44,9 @@ There are also many other options for running virtually anywhere, including on
 premise: [Kubernetes](https://kubernetes.io/docs/getting-started-guides/)
 
 The demo utilizes [Minikube](https://github.com/kubernetes/minikube) as a
-lightweight option for demo purposes only.
+lightweight option for demo purposes only. If you are using something
+different, you will need to adjust the URL on line 49 of
+[html-frontend/index.html](/html-frontend/index.html).
 
 ## Minikube
 
