@@ -124,7 +124,7 @@ etcd-0               Healthy   {"health": "true"}
 
 ## Ingress
 
-The demo employs an [ingress](https://kubernetes.io/docs/user-guide/ingress/)
+This demo employs an [ingress](https://kubernetes.io/docs/user-guide/ingress/)
 to route incoming cluster traffic to desired K8S services. The terms *service*
 and *pod* are used frequently.  Don't worry if you don't understand these
 concepts yet, they are covered below.
@@ -187,13 +187,13 @@ actual demo.com website.
 
 ## Image Registry
 
-Using an external Docker registry isn't a viable option for the demo because
-internet access isn't guaranteed. It is possible to create a local docker
-registry but the complexity surrounding security distracts from the purpose.
-Therefore, we are going to manually build (in advance) the demo containers
-using Minikube's docker daemon. With the containers already available locally,
-K8S will not attempt to download them. Navigate to the project directory and
-run the commands below.
+Using an external Docker registry isn't a viable option for this demo because
+internet access isn't guaranteed. It is possible to create a [local docker
+registry](https://docs.docker.com/registry/deploying/) but the complexity
+surrounding security distracts from the purpose.  Therefore, we are going to
+manually build (in advance) the demo containers using Minikube's docker daemon.
+With the containers already available locally, K8S will not attempt to download
+them. Navigate to the project directory and run the commands below.
 
 ``` powershell
 # point to the docker daemon on the minikube machine 
