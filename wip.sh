@@ -1,3 +1,3 @@
 git add --all
-git commit -m "update wording"
+git commit -m "WIP commit"
 git push
