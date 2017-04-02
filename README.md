@@ -33,8 +33,8 @@ git clone https://github.com/dalealleshouse/zero-to-devops.git
 
 ## Kubernetes Cluster
 
-In order to run the demo, you must have a K8S cluster. Creating a cluster is
-easy with all three of the major cloud providers.
+In order to run the demo, you must have a working K8S cluster. Creating a
+cluster is easy with all three of the major cloud providers.
 
 - [Google Cloud](https://cloud.google.com/container-engine/docs/quickstart)
 - [Azure](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough)
@@ -44,9 +44,8 @@ There are also many other options for running virtually anywhere, including on
 premise: [Kubernetes](https://kubernetes.io/docs/getting-started-guides/)
 
 The demo utilizes [Minikube](https://github.com/kubernetes/minikube) as a
-lightweight option for demo purposes only. If you are using something
-different, you will need to adjust the URL on line 49 of
-[html-frontend/index.html](/html-frontend/index.html).
+lightweight option for demo purposes only. For other cluster options, adjust
+the URL on line 49 of [html-frontend/index.html](/html-frontend/index.html).
 
 ## Minikube
 
