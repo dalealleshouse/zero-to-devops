@@ -493,4 +493,5 @@ kubectl rollout history deployment html-frontend --revision=*REVISION_NUMBER*
 - [Secrets](https://kubernetes.io/docs/user-guide/secrets/)
 - [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
 - [Stateful Sets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
+- [K8S Client Libraries](https://github.com/kubernetes/community/blob/master/contributors/devel/client-libraries.md)
 - [So Much More](https://kubernetes.io/docs/home/)
