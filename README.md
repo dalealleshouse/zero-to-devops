@@ -326,6 +326,29 @@ kubectl replace -f .\kube\html-frontend.dply.yml
 Configuration files stored in source control is the recommended way to work
 with K8S.
 
+## Dashboard/Monitoring
+
+K8S comes equipped with two decent monitoring tools out of the box:
+[dashboard](https://kubernetes.io/docs/user-guide/ui/) and
+[heapster](http://blog.kubernetes.io/2015/05/resource-usage-monitoring-kubernetes.html).
+The following command outputs several useful K8S URLs, notice there is a URL
+for both tools.
+
+``` powershell
+kubectl cluster-info
+```
+
+If you are using Minikube, Heapster is not enabled by default and the dashboard
+URL isn't quite right. Use the following command to see both tools using Minikube.
+
+``` powershell
+minikube addons enable heapster
+minikube addons open heapster
+minikube open dashboard
+```
+
+The monitoring tools are implemented as plug ins so they easy to replace/modify.
+
 ## Scaling
 
 Increasing the number of pod replicas on a deployment is as easy as running the
@@ -343,11 +366,31 @@ kubectl get pods -l run=html-frontend
 ```
 
 After the service has time to register the change, it will automatically round
-robin load balance requests. Notice the name of the pod on the web page changes
-for every subsequent request.
+robin load balance requests to the replicas. Notice the name of the pod on the
+web page changes for every subsequent request.
+
+The ability to manually scale pods quickly is great; however, K8S has an even
+better option. It's possible to scale in response to load. The command below
+tells K8S to maintain between 1 and 5 replicas based on eighty percent CPU
+usage. This means if the allocated CPU for the all pods goes above 80%, new
+replicas will be added. If it goes below 80%, replicas are removed.
 
 ``` powershell
 kubectl autoscale deployment java-consumer --min=1 --max=5 --cpu-percent=80
+```
+
+After running the command above, notice that the number of java-consumer
+replicas slowly climbs. As of the 1.5 release, CPU is the only metric available
+to scale on. However, there are plans to add more in upcoming releases.
+
+The autoscale command creates a *Horizontal Pod Scaling* resource. Just like
+any other K8S resource, it can be manipulated via a yaml file. The following
+commands display information about the resource.
+
+``` powershell
+kubectl get hpa
+kubectl describe hpa
+kubectl get hpa -o yaml
 ```
 
 ## Self Healing
@@ -451,8 +494,6 @@ kubectl rollout history deployment/html-frontend
 kubectl rollout history deployment/html-frontend --revision=*REVISION_NUMBER*
 ```
 
-## Dashboard/Monitoring
-
 ## Other Cool Stuff
 
 - Secrets
@@ -460,22 +501,3 @@ kubectl rollout history deployment/html-frontend --revision=*REVISION_NUMBER*
 - Stateful Sets
 - Resources Limits
 - QOS Requests
-
-## Ignore everything under this line...
-
-```
-kubectl config use-context minikube
-
-minikube addons enable heapster
-minikube addons open heapster
-```
-
-1. High level overview of Kubernetes
-    - Node layout
-    - Master Nodes
-    - Services Running On Each Node
-    - Scheduler
-        - Binpacking
-1. Demo
-    - Auto Scaling
-    - Monitoring

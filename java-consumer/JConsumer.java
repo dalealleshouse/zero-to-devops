@@ -51,13 +51,24 @@ public class JConsumer extends DefaultConsumer
         try
         {
             fib_num = Integer.parseInt(message);
-            Thread.sleep(fib_num * 1000);
-            
+            System.out.println("\tProcessing fib(" + message + ")...");
+            System.out.println("Finished: fib(" + message + "): " + fib(fib_num));
         } catch (NumberFormatException e)
         {
             System.out.println("ERROR: Not an int.");
-        } catch (InterruptedException e)
-	{ }
-        this.getChannel().basicAck(envelope.getDeliveryTag(), false);
+            return;
+        }
+        finally
+        {
+            this.getChannel().basicAck(envelope.getDeliveryTag(), false);
+        }
+    }
+
+    int fib(int cur)
+    {
+        if(cur < 2)
+            return 1;
+
+        return fib(cur -1) + fib(cur -2);
     }
 }
