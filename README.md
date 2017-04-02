@@ -45,7 +45,7 @@ options](https://kubernetes.io/docs/getting-started-guides/) for running
 virtually anywhere, including on premise.
 
 This demo utilizes [Minikube](https://github.com/kubernetes/minikube). For
-other cluster options, adjust the STATUS_HOST environment variable on line 23
+other cluster options, change the STATUS_HOST environment variable on line 23
 of the [html-frontend](/kube/html-frontend.dply.yml) deployment file.
 
 ## Minikube
@@ -56,13 +56,13 @@ It's a great option for presentations (like this one) because it provides a
 means to work with K8S without an internet connection. Yes, believe it or not,
 internet connectivity is a bit capricious at conferences and meet ups.
 
-The demo should work fine on Mac, older Windows, or Linux. However, it hasn't
-been tested. These instruction apply specifically to Windows 10 and Powershell,
-which requires special minikube configuration. If you are able to get it
-working with a different OS or configuration, add information about your
+This demo should work fine on Mac, older Windows, or Linux. However, it hasn't
+been tested and will require slightly different Minikube configurations. These
+instruction apply specifically to Windows 10 and Powershell. If you are able to
+get it working with a different OS or configuration, add information about your
 experience and I'll happily accept a pull request.
 
-Special Windows 10 minikube configuration:
+Windows 10 Minikube configuration:
 
 - Enable HyperV (If you are able to run Docker, it should be)
 - Create a Virtual Switch in Hyper-V:
@@ -108,9 +108,9 @@ etcd-0               Healthy   {"health": "true"}
 ## Ingress
 
 The demo employs an [ingress](https://kubernetes.io/docs/user-guide/ingress/)
-to route incoming cluster traffic to desired K8S services.  The terms *service*
+to route incoming cluster traffic to desired K8S services. The terms *service*
 and *pod* are used frequently.  Don't worry if you don't understand these
-concepts yet, they are covered in the demo.
+concepts yet, they are covered below.
 
 An ingress is a set of rules that allow inbound connections to reach K8S
 services. In K8S, an ingress has two components: an ingress resource and an
