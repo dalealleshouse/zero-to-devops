@@ -40,8 +40,9 @@ cluster is easy with all three of the major cloud providers.
 - [Azure](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough)
 - [Amazon](https://kubernetes.io/docs/getting-started-guides/aws/)
 
-There are also many other options for running virtually anywhere, including on
-premise: [Kubernetes](https://kubernetes.io/docs/getting-started-guides/)
+There are also many [other
+options](https://kubernetes.io/docs/getting-started-guides/) for running
+virtually anywhere, including on premise.
 
 The demo utilizes [Minikube](https://github.com/kubernetes/minikube) as a
 lightweight option for demo purposes only. For other cluster options, adjust
