@@ -373,7 +373,7 @@ web page changes for every subsequent request.
 
 The ability to manually scale pods quickly is great; however, K8S has an even
 better option. It's possible to scale in response to load. The command below
-tells K8S to maintain between 1 and 5 replicas based on eighty percent CPU
+tells K8S to maintain between 1 and 5 replicas based on fifty percent CPU
 usage. This means if the allocated CPU for the all pods goes above 50%, new
 replicas will be added. If it goes below 50%, replicas are removed. Most
 details on the auto scaling algorithm can be found
