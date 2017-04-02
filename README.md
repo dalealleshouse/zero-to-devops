@@ -244,7 +244,7 @@ kubectl get rs
 kubectl get pods
 ```
 
-Each pod represents a container running on the K8S cluster.  kubectrl mirrors
+Each pod represents a container running on the K8S cluster.  kubectl mirrors
 several Docker commands. For instance, you can obtain direct access to a pod
 with exec or view stdout using log.
 
