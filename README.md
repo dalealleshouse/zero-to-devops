@@ -229,7 +229,7 @@ higher level object that encompasses both *Pod*s and *Replica Set*s. The
 commands below create *Deployment*s for each container in the demo system.
 
 ``` powershell
-kubectl run html-frontend --image=html-frontend:1.0 --port=80
+kubectl run html-frontend --image=html-frontend:1.0 --port=80 --env STATUS_HOST=status.demo.com
 kubectl run java-consumer --image=java-consumer:1.0
 kubectl run ruby-producer --image=ruby-producer:1.0
 kubectl run status-api --image=status-api:1.0 port=5000
