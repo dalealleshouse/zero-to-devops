@@ -496,8 +496,7 @@ kubectl rollout history deployment/html-frontend --revision=*REVISION_NUMBER*
 
 ## Other Cool Stuff
 
-- Secrets
-- Volumes
-- Stateful Sets
-- Resources Limits
-- QOS Requests
+- [Secrets](https://kubernetes.io/docs/user-guide/secrets/)
+- [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
+- [Stateful Sets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
+- [So Much More](https://kubernetes.io/docs/home/)
