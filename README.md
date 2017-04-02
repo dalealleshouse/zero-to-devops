@@ -378,7 +378,7 @@ usage. This means if the allocated CPU for the all pods goes above 80%, new
 replicas will be added. If it goes below 80%, replicas are removed.
 
 ``` powershell
-kubectl autoscale deployment java-consumer --min=1 --max=5 --cpu-percent=80
+kubectl autoscale deployment java-consumer --min=1 --max=5 --cpu-percent=50
 ```
 
 After running the command above, notice that the number of java-consumer
@@ -441,15 +441,7 @@ a bad request. The following commands simulate such a failure.
 
 ```
 kubectl get pods
-
-# Get shell access to an html-frontend pod
-kubectl exec -it *POD_NAME* bash
-
-# inside the pod
-rm -rf usr/share/nginx/html/healthz.html
-exit
-
-# Back in Powershell, view the pods
+kubectl exec *POD_NAME* rm usr/share/nginx/html/healthz.html
 kubectl get pods
 ```
 
@@ -484,7 +476,7 @@ image is flawed. Luckily, with K8S it's rolling back to the previous images is
 as easy as the following command:
 
 ``` powershell
-kubectl rollout undo deployment/html-frontend
+kubectl rollout undo deployment html-frontend
 ```
 
 There are a few different options for rollbacks. The following commands display
@@ -492,8 +484,8 @@ the roll out history of a deployment.  Putting a *--revision=#* after the
 *rollout undo* command will roll back to specific version.
 
 ``` powershell
-kubectl rollout history deployment/html-frontend
-kubectl rollout history deployment/html-frontend --revision=*REVISION_NUMBER*
+kubectl rollout history deployment html-frontend
+kubectl rollout history deployment html-frontend --revision=*REVISION_NUMBER*
 ```
 
 ## Other Cool Stuff
