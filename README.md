@@ -292,6 +292,14 @@ To ensure the services were created correctly, run the command below.
 ``` powershell
 kubectl get services
 ```
+As a side note, the command above reveals a service that we didn't create named
+kubernetes. This is used for communication with the core API. It is possible to
+consume this REST API without going through kubectl. In fact, there are a few
+[client
+libraries](https://github.com/kubernetes/community/blob/master/contributors/devel/client-libraries.md)
+readily available. This is beyond the scope of the demo, but more information
+is available
+[here](https://kubernetes.io/docs/concepts/overview/kubernetes-api/).
 
 If everything is configured correctly, navigating to demo.com will display the
 page served up from the NGINX pod.
