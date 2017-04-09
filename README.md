@@ -501,10 +501,10 @@ kubectl rollout history deployment html-frontend --revision=*REVISION_NUMBER*
 
 ## Other Cool Stuff
 
-- [Secrets](https://kubernetes.io/docs/user-guide/secrets/)
+- [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
 - [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
 - [Stateful Sets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
-- [Doemon Sets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
+- [Daemon Sets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
 - [Jobs](https://kubernetes.io/docs/concepts/jobs/run-to-completion-finite-workloads/)
 - [Cron Jobs](https://kubernetes.io/docs/user-guide/cron-jobs/)
 - [So Much More](https://kubernetes.io/docs/home/)
