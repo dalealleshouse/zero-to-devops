@@ -504,5 +504,7 @@ kubectl rollout history deployment html-frontend --revision=*REVISION_NUMBER*
 - [Secrets](https://kubernetes.io/docs/user-guide/secrets/)
 - [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
 - [Stateful Sets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
-- [K8S Client Libraries](https://github.com/kubernetes/community/blob/master/contributors/devel/client-libraries.md)
+- [Doemon Sets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
+- [Jobs](https://kubernetes.io/docs/concepts/jobs/run-to-completion-finite-workloads/)
+- [Cron Jobs](https://kubernetes.io/docs/user-guide/cron-jobs/)
 - [So Much More](https://kubernetes.io/docs/home/)
