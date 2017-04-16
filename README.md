@@ -354,7 +354,7 @@ URL isn't quite right. Use the following command to see both tools using Minikub
 ``` powershell
 minikube addons enable heapster
 minikube addons open heapster
-minikube open dashboard
+minikube dashboard open
 ```
 
 The monitoring tools are implemented as plug ins so they easy to replace/modify.
