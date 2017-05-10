@@ -83,7 +83,7 @@ any problems with the setup, refer to
 ## kubectl
 
 kubectl is a command line tool that is part of the K8S open source project.
-There are two options for installing it. The first is download it from
+There are two options for installing it. The first is to download it from
 [Google's K8S](https://kubernetes.io/docs/tasks/kubectl/install/) site. An
 easier option is to use the Azure CLI tool. Simply run the following command.
 
