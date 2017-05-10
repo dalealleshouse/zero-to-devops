@@ -1,7 +1,10 @@
-# Zero to DevOps in Under an Hour with Kubernetes 
+# Zero to DevOps in Under an Hour with Kubernetes  - Azure Edition!
 
 This repo contains the demo code presented in the Zero to DevOps talk. Slides
 available [here](http://slides.com/dalealleshouse/kube)
+
+The demo utilizes Windows Subsystem for Linux; however, it should work equally
+well using your favorite command line.
 
 ## Abstract
 
@@ -13,6 +16,14 @@ Live on stage (demo gods willing), you'll witness a full K8S configuration. In
 less than an hour, we'll build an environment capable of: Automatic Binpacking,
 Instant Scalability, Self-healing, Rolling Deployments, and Service
 Discovery/Load Balancing.
+
+## Prerequisites
+
+All of the following software must be installed in order to run this demo.
+
+1) [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+1) [Docker](https://www.docker.com/community-edition)
+1) [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 
 ## Demo System
 
@@ -28,86 +39,76 @@ The demo system consists of five separate applications that work together.
 1. RabbitMQ is configured as a standard work queue
 1. Ruby Producer pushes a message with a random number on the queue every
    second
-1. Java Consumer pulls messages from the queue one at a time and generates
-   Fibonacci numbers in order to simulate CPU bound work
-
-## Prerequisites
-
-All of the following software must be installed in order to run this demo.
-
-1) [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-1) [Docker](https://www.docker.com/community-edition)
-1) [kubectl](https://kubernetes.io/docs/tasks/kubectl/install/)
+1. Java Consumer pulls messages from the queue and generates Fibonacci numbers
+   in order to simulate CPU bound work
 
 ## Clone the Repo
 
 Although it most likely goes without saying, the first thing you need to do is
 clone this repo.
 
-``` powershell
+``` bash
 git clone https://github.com/dalealleshouse/zero-to-devops.git
 ```
 
 ## Kubernetes Cluster
 
-In order to run the demo, you must have a working K8S cluster. Creating a
-cluster is easy with all three of the major cloud providers.
+The first step is to create a K8S cluster on Azure, which is exceedingly easy
+using the CLI tool. First, a resource group is required. Creating a new one for
+the demo makes for easy clean up afterwards.
 
-- [Google Cloud](https://cloud.google.com/container-engine/docs/quickstart)
-- [Azure](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough)
-- [Amazon](https://kubernetes.io/docs/getting-started-guides/aws/)
+``` bash
+# Set a few variables to store values for later use
+RESOURCE_GROUP=kube-demo
+LOCATION=eastus
 
-There are also many [other
-options](https://kubernetes.io/docs/getting-started-guides/) for running
-virtually anywhere, including on premise.
-
-This demo utilizes [Minikube](https://github.com/kubernetes/minikube). Although
-it will run in other cluster environments, there will be minor configuration
-changes. These instructions apply specifically to Minikube.
-
-## Minikube
-
-[Minikube](https://github.com/kubernetes/minikube) is a single-node K8S cluster
-that runs inside a virtual machine intended for development use and testing.
-It's a great option for presentations (like this one) because it provides a
-means to work with K8S without an internet connection. Yes, believe it or not,
-internet connectivity is a bit capricious at conferences and meet ups.
-
-This demo should work fine on Mac, older Windows, or Linux. However, it hasn't
-been tested and will require slightly different Minikube configurations. These
-instruction apply specifically to Windows 10 and Powershell. If you are able to
-get it working with a different OS or configuration, add information about your
-experience and I'll happily accept a pull request.
-
-Windows 10 Minikube configuration:
-
-- Enable HyperV (If you are able to run Docker, it should be)
-- Create a Virtual Switch in Hyper-V:
-  - Open Hyper-V Manager
-  - Select Virtual Switch Manager
-  - Select the "External" switch type
-  - Click the "Create Virtual Switch" button
-  - Select your network adapter from the drop down list under "External Network"
-  - Name the switch "minikube"
-  - Close Virtual Switch Manager and Hyper-V Manager
-- Path minikube
-  - Download [minikube](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
-  - Save the file in an easily accessible path
-  - Run the command below
-
-``` powershell
-# add this to your profile to make it permanent
-New-Alias minikube *PATH-TO-MINIKUBE-EXE* 
+az group create --name=$RESOURCE_GROUP --location=$LOCATION
 ```
 
-All minikube commands require running Powershell as an Administrator. The
-command below will start minikube and configure kubectl.
+Next, create the actual cluster.
 
-``` powershell
-minikube --vm-driver=hyperv --hyperv-virtual-switch=minikube start 
+``` bash
+# Set a few more variable for later use
+DNS_PREFIX=kube-demo
+CLUSTER_NAME=kube-demo
+
+az acs create --orchestrator-type=kubernetes --resource-group $RESOURCE_GROUP \
+--name=$CLUSTER_NAME --dns-prefix=$DNS_PREFIX --generate-ssh-keys
 ```
 
-Verify everything is configured correctly with the following command.
+It will take several minutes for the cluster to come online. If you encounter
+any problems with the setup, refer to
+[Azure](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough)
+
+## kubectl
+
+kubectl is a command line tool that is part of the K8S open source project.
+There are two options for installing it. The first is download it from
+[Google's K8S](https://kubernetes.io/docs/tasks/kubectl/install/) site. An
+easier option is to use the Azure CLI tool. Simply run the following command.
+
+``` bash
+sudo az acs kubernetes install-cli
+````
+
+Next, kubectl must be configured and authorized for the newly created cluster.
+The command below uses the Azure CLI to configure kubectl.
+
+``` bash
+az acs kubernetes get-credentials --resource-group=$RESOURCE_GROUP \
+--name=$CLUSTER_NAME
+```
+
+Behind the scenes, the command is downloading certificates used for
+authentication and updating the ~/.kube/config file which kubectl uses for
+configuration information. To view the configuration file, use the following
+command.
+
+``` bash
+kubectl config view
+```
+
+Use the following command to verify the system is configured correctly.
 
 ``` powershell 
 kubectl get cs
@@ -121,69 +122,6 @@ controller-manager   Healthy   ok
 scheduler            Healthy   ok
 etcd-0               Healthy   {"health": "true"}
 ```
-
-## Ingress
-
-This demo employs an [ingress](https://kubernetes.io/docs/user-guide/ingress/)
-to route incoming cluster traffic to desired K8S services. The terms *service*
-and *pod* are used frequently.  Don't worry if you don't understand these
-concepts yet, they are covered below.
-
-An ingress is a set of rules that allow inbound connections to reach K8S
-services. In K8S, an ingress has two components: an ingress resource and an
-ingress controller. An ingress resource is a K8S object that defines routing
-rules. The one used for this demo is located [here](/kube/ingress.yml). An
-ingress controller is a daemon that runs as a K8S pod (similar to a container).
-It is responsible for watching the ingress resource and satisfying requests to
-the ingress. In short, it's special load balancer.
-
-In typical scenarios, you may be required to supply your own ingress controller
-using something like NGINX or Traefik. Minikube comes with a preconfigured NGIX
-[ingress
-controller](https://github.com/kubernetes/minikube/tree/master/deploy/addons/ingress).
-Use the following command to enable it.
-
-``` powershell
-minikube addons enable ingress
-```
-
-Next, create the K8S ingress resource. Assuming you are in this project's root
-directory, run the following command.
-
-``` powershell
-kubectl create -f .\kube\ingress.yml
-```
-
-Barring any errors, the command below should display information about the
-ingress you just created.
-
-``` powershell
-kubectl describe ing
-```
-
-The astute reader will notice that the ingress rules are routing traffic from
-demo.com and status.demo.com. For demo purposes, we are going to update our
-hosts file to map those domains to the IP address of the cluster. The command
-below will reveal the Minikube address.
-
-``` powershell
-minikube ip
-```
-
-Add the entries below to your hosts file. Make sure to use the IP address from
-the above command. In case you need it, here are instructing for updating the
-hosts file on
-[windows](https://support.rackspace.com/how-to/modify-your-hosts-file/) and
-[mac](http://www.imore.com/how-edit-your-macs-hosts-file-and-why-you-would-want)
-
-
-```
-*MINIKUBE_IP* demo.com
-*MINIKUBE_IP* status.demo.com
-```
-
-Make sure to remove these after the demo in case you ever want to visit the
-actual demo.com website.
 
 ## Image Registry
 
