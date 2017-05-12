@@ -16,7 +16,7 @@ spec:
         run: java-consumer
     spec:
       containers:
-      - image: java-consumer:1.0
+      - image: dalealleshouse/java-consumer:1.0
         name: java-consumer
         resources:
           limits:

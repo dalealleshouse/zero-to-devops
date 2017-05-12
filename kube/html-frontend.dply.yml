@@ -16,11 +16,11 @@ spec:
         run: html-frontend
     spec:
       containers:
-      - image: html-frontend:1.0
+      - image: dalealleshouse/html-frontend:1.0
         name: html-frontend
         env:
           - name: STATUS_HOST
-            value: status.demo.com
+            value: 52.186.123.132
         ports:
         - containerPort: 80
           protocol: TCP

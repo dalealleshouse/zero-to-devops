@@ -19,5 +19,5 @@ spec:
       containers:
       - args:
         - port=5000
-        image: status-api:1.0
+        image: dalealleshouse/status-api:1.0
         name: status-api
