@@ -249,8 +249,7 @@ Running this command reveals that the three requested replicas are already up an
 kubectl get pods -l run=html-frontend
 ```
 
-After the service has time to register the change, it will automatically round robin load balance requests to the
-replicas. Notice the name of the pod on the web page changes for every subsequent request.
+After the service has time to register the change, it will load balance requests to the replicas.
 
 The ability to manually scale pods quickly is great; however, K8S has an even better option. It's possible to scale in
 response to load. The command below tells K8S to maintain between 1 and 5 replicas based on fifty percent CPU usage.
