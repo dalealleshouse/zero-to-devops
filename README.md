@@ -200,11 +200,11 @@ commands below create *Deployment*s for each container in the demo system.
 
 ``` bash
 kubectl run html-frontend --image=dalealleshouse/html-frontend:1.0 --port=80\
-  --env STATUS_HOST=k8-master:31111 --lables="app=html-frontend"
+  --env STATUS_HOST=k8-master:31111 --labels="app=html-frontend"
 kubectl run java-consumer --image=dalealleshouse/java-consumer:1.0
 kubectl run ruby-producer --image=dalealleshouse/ruby-producer:1.0 
 kubectl run status-api --image=dalealleshouse/status-api:1.0 port=5000 \
-  --lables="app=status-api"
+  --labels="app=status-api"
 kubectl run queue --image=arm32v6/rabbitmq:3.7-management-alpine
 ```
 
