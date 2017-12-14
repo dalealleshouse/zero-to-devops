@@ -198,17 +198,19 @@ A K8S [*Deployment*](https://kubernetes.io/docs/user-guide/deployments/) is a
 higher level object that encompasses both *Pod*s and *Replica Set*s. The
 commands below create *Deployment*s for each container in the demo system.
 
-``` powershell
-kubectl run html-frontend --image=dalealleshouse/html-frontend:1.0 --port=80 --env STATUS_HOST=status.demo.com
+``` bash
+kubectl run html-frontend --image=dalealleshouse/html-frontend:1.0 --port=80\
+  --env STATUS_HOST=k8-master:31111 --lables="app=html-frontend"
 kubectl run java-consumer --image=dalealleshouse/java-consumer:1.0
-kubectl run ruby-producer --image=dalealleshouse/ruby-producer:1.0
-kubectl run status-api --image=dalealleshouse/status-api:1.0 port=5000
+kubectl run ruby-producer --image=dalealleshouse/ruby-producer:1.0 
+kubectl run status-api --image=dalealleshouse/status-api:1.0 port=5000 \
+  --lables="app=status-api"
 kubectl run queue --image=arm32v6/rabbitmq:3.7-management-alpine
 ```
 
 Verify the objects were created correctly with the following command.
 
-``` powershell
+``` bash
 kubectl get deployments
 kubectl get rs
 kubectl get pods
@@ -218,14 +220,14 @@ Each pod represents a container running on the K8S cluster.  kubectl mirrors
 several Docker commands. For instance, you can obtain direct access to a pod
 with exec or view stdout using log.
 
-``` powershell
+``` bash
 kubectl exec -it *POD_NAME* bash
 kubectl logs *POD_NAME*
 ```
 
 ## Services
 
-Viewing the logs of the ruby producer reveals that it unable to connect to the
+Viewing the logs of the java consumer reveals that it unable to connect to the
 queue. Each pod has an IP address that is reachable inside the K8S cluster. One
 could simply determine the IP address of the queue and update the ruby
 producer. However, the address is ephemeral.  If the pod dies and is
@@ -233,11 +235,11 @@ regenerated the IP address will change. K8S services provide a durable endpoint
 for pods. The command below creates a *Cluster IP* service and exposes ports
 for the queue pod.
 
-``` powershell
+``` bash
 kubectl expose deployment queue --port=15672,5672 --name=queue
 ```
 
-It may take a minute or two, but inspecting the logs from the ruby producer pod
+It may take a minute or two, but inspecting the logs from the java consumer pod
 should show that the service is now sending messages to the queue. *Cluster IP*
 services enable inner-cluster communication.
 
@@ -247,14 +249,16 @@ necessary to create either a *Node Port* or *Load Balancer* service.  As the
 names imply, a *Node Port* service connects a port on the cluster to a pod and
 a *Load Balancer* service connects an external load balancer to a pod. Most
 cloud providers offer a convenient means of creating *Load Balancer* services.
-However, this isn't an option with Minikube. Therefore, the demo employs *Node
-Port* services.
+However, this isn't an option with the demo cluster. Therefore, the demo
+employs *Node Port* services.
 
 The commands below create *Node Port* services for the NGINX and REST API pods. 
 
-``` powershell
-kubectl expose deployment html-frontend --port=80 --name=html-frontend --type=NodePort
-kubectl expose deployment status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
+``` bash
+kubectl create service nodeport html-frontend --tcp=80:80 --node-port=31112
+kubectl create service nodeport status-api --tcp=80:5000 --node-port=31111
+# kubectl expose deployment status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
+# kubectl expose deployment html-frontend --port=80 --name=html-frontend --type=NodePort
 ```
 
 To ensure the services were created correctly, run the command below.
