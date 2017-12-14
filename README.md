@@ -1,7 +1,7 @@
 # Zero to DevOps in Under an Hour with Kubernetes 
 
 This repo contains the demo code presented in the Zero to DevOps talk. Slides
-available [here](http://slides.com/dalealleshouse/kube)
+available [here](http://slides.com/dalealleshouse/kube-pi)
 
 ## Abstract
 
@@ -9,10 +9,10 @@ The benefits of containerization cannot be overstated. Tools like Docker have
 made working with containers easy, efficient, and even enjoyable. However,
 management at scale is still a considerable task. That's why there's Kubernetes
 (K8S).  Come see how easy it is to create a manageable container environment.
-Live on stage (demo gods willing), you'll witness a full K8S configuration. In
-less than an hour, we'll build an environment capable of: Automatic Binpacking,
-Instant Scalability, Self-healing, Rolling Deployments, and Service
-Discovery/Load Balancing.
+Live on stage (demo gods willing), you'll witness a full K8S configuration on a
+Raspberry Pi cluster. In less than an hour, we'll build an environment capable
+of: Automatic Binpacking, Instant Scalability, Self-healing, Rolling
+Deployments, and Service Discovery/Load Balancing.
 
 ## Demo System
 
@@ -44,8 +44,8 @@ All of the following software must be installed in order to run this demo.
 Although it most likely goes without saying, the first thing you need to do is
 clone this repo.
 
-``` powershell
-git clone https://github.com/dalealleshouse/zero-to-devops.git
+``` bash
+git clone -b pi https://github.com/dalealleshouse/zero-to-devops.git
 ```
 
 ## Kubernetes Cluster
@@ -61,9 +61,12 @@ There are also many [other
 options](https://kubernetes.io/docs/getting-started-guides/) for running
 virtually anywhere, including on premise.
 
-This demo utilizes [Minikube](https://github.com/kubernetes/minikube). Although
-it will run in other cluster environments, there will be minor configuration
-changes. These instructions apply specifically to Minikube.
+This demo utilizes a cluster made from Raspberry Pis, as described in [Scott
+Hanselman's excellent
+blog](https://www.hanselman.com/blog/HowToBuildAKubernetesClusterWithARMRaspberryPiThenRunNETCoreOnOpenFaas.aspx).
+Although it will run in other cluster environments, there will be minor
+configuration changes. These instructions apply specifically to this
+configuration.
 
 ## Minikube
 
