@@ -78,7 +78,7 @@ and cannot be inferred from the previous section.
 There are four pis in the demo cluster.
 - k8-master
 - k8-node-1
-- k8-node-3
+- k8-node-2
 - k8-node-3
 
 In order to provide durable IP addresses for each pi, the router issues static
@@ -91,7 +91,7 @@ file](https://support.rackspace.com/how-to/modify-your-hosts-file/) provide
 domain name resolution. The exact entries are listed below. Obviously, your IP
 addresses will be different.
 
-```
+```text
 192.168.1.3 k8-master
 192.168.1.4 k8-node-1
 192.168.1.5 k8-node-2
@@ -101,9 +101,9 @@ addresses will be different.
 Finally, the demo utilizes the
 [WSL](https://docs.microsoft.com/en-us/windows/wsl/about) ubuntu shell (yes,
 it's really Ubuntu, distributed by Cononical, running on Windows). If you
-haven't tried this amazing new feature, do it. What are you waiting for, do it
-NOW! The same entries from the windows hosts file need to go in the /etc/hosts
-file to provide domain name resolution for the shell.
+haven't tried this amazing new feature, do it. What are you waiting for? Do it
+NOW!!! The same entries from the windows hosts file need to go in the
+/etc/hosts file to provide domain name resolution for the shell.
 
 
 If everything is set up correctly, you should be able to ssh into each pi.
@@ -111,6 +111,33 @@ If everything is set up correctly, you should be able to ssh into each pi.
 ``` bash
 # eg ssh pi@k8-master or ssh pi@k8-node-3
 ssh pi@<pi name>
+```
+
+# kubectl
+
+[kubectl](https://kubernetes.io/docs/reference/kubectl/overview/) is the
+command line utility used to administer K8S clusters. If you followed the
+instructions for creating a cluster using Raspberry Pis, it is working
+on the pi master node. In order to modify the cluster from an
+external machine, the config file is required. Preform the following steps:
+
+Install kubectl
+``` bash
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin/kubectl
+```
+
+Create a configuration directory and copy the config from the master node.
+```bash
+mkdir $HOME/.kube
+sudo scp pi@k8-master:/home/pi/.kube/config $HOME/.kube/config
+```
+
+Restart the shell, and use the following command to verify everything is
+working.
+```bash
+kubectl get cs
 ```
 
 ## Image Registry
