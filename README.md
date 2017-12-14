@@ -157,20 +157,22 @@ docker push dalealleshouse/html-frontend:1.0
 docker build --tag dalealleshouse/html-frontend:2.0 html-frontend-err/
 docker push dalealleshouse/html-frontend:2.0
 
+# Must be built and run on ARM32 architecture
 docker build --tag dalealleshouse/java-consumer:1.0 java-consumer/
 docker push dalealleshouse/java-consumer:1.0
 
 docker build --tag dalealleshouse/ruby-producer:1.0 ruby-producer/
 docker push dalealleshouse/ruby-producer:1.0
 
+# Must be built on 64 bit and run on ARM32 architecture
 docker build --tag dalealleshouse/status-api:1.0 status-api/
 docker push dalealleshouse/status-api:1.0
 ```
 
 The internet connectivity at conferences can be a bit capricious. Therefore,
-the images are manually downloaded on each pi before the demo. During the on
-stage demonstration, the containers will be available locally.  Therefore, K8S
-will not attempt to download them. SSH into each pi and run the commands below.
+the images are manually downloaded on each pi before the demo to prevent K8S
+from trying to retrieve them from the internet. SSH into each pi and run the
+commands below.
 
 ``` bash
 docker pull dalealleshouse/html-frontend:1.0
