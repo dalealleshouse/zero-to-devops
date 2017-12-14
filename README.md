@@ -318,10 +318,11 @@ The major cloud providers have the dashboard pre-configured. However, we will
 need to set it up manually. The steps below deploy a development dashboard
 without major concerns for security.
 
-Install the dashboard.
+Install the dashboard and heapster
 ``` bash
 curl -sSL https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard-arm.yaml \
 	| kubectl create -f -
+kubectl create -f https://raw.githubusercontent.com/luxas/kubeadm-workshop/kubecon/demos/monitoring/heapster.yaml
 ```
 
 The command below creates a simple admin account. However, in production
@@ -348,21 +349,21 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | \
 grep admin-user | awk '{print $1}')
 ```
 
-Copy and paste the value in the *token* field to log in.
+Copy and paste the value in the *token* field to authenticate.
 
 ## Scaling
 
 Increasing the number of pod replicas on a deployment is as easy as running the
 command below.
 
-``` powershell
+``` bash
 kubectl scale deployment html-frontend --replicas=3
 ```
 
 Running this command reveals that the three requested replicas are already up
 and running.
 
-``` powershell
+``` bash
 kubectl get pods -l run=html-frontend
 ```
 
@@ -372,14 +373,14 @@ web page changes for every subsequent request.
 
 The ability to manually scale pods quickly is great; however, K8S has an even
 better option. It's possible to scale in response to load. The command below
-tells K8S to maintain between 1 and 5 replicas based on fifty percent CPU
+tells K8S to maintain between 1 and 30 replicas based on fifty percent CPU
 usage. This means if the allocated CPU for the all pods goes above 50%, new
 replicas will be added. If it goes below 50%, replicas are removed. Most
 details on the auto scaling algorithm can be found
 [here](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/horizontal-pod-autoscaler.md)
 
-``` powershell
-kubectl autoscale deployment java-consumer --min=1 --max=5 --cpu-percent=50
+``` bash
+kubectl autoscale deployment java-consumer --min=1 --max=30 --cpu-percent=50
 ```
 
 After running the command above, notice that the number of java-consumer
@@ -390,7 +391,7 @@ The autoscale command creates a *Horizontal Pod Scaling* resource. Just like
 any other K8S resource, it can be manipulated via a yaml file. The following
 commands display information about the resource.
 
-``` powershell
+``` bash
 kubectl get hpa
 kubectl describe hpa
 kubectl get hpa -o yaml
@@ -401,11 +402,7 @@ kubectl get hpa -o yaml
 Replica controllers automatically add new pods when scaling up.  Likewise, they
 generate a new pod when one goes down. See the commands below.
 
-``` powershell
-# point to the docker daemon on the minikube machine 
-# eval $(minikube docker-env) on Mac/Linux 
-& minikube docker-env | Invoke-Expression
-
+``` bash
 # View the html-frontend pods
 docker ps -f label=io.kubernetes.container.name=html-frontend
 
@@ -440,14 +437,14 @@ The section of interest is shown below.
 This tells K8S to request healthz.html every 2 seconds and restart the pod upon
 a bad request. The following commands simulate such a failure.
 
-```
+``` bash
 kubectl get pods
 kubectl exec *POD_NAME* rm usr/share/nginx/html/healthz.html
 ```
 
 Running `kubectl get pods` again should produce an output similar to below:
 
-``` powershell
+``` bash
 NAME                             READY     STATUS    RESTARTS   AGE
 html-frontend-1306390030-t1sqx   1/1       Running   1          12m
 ...
@@ -467,8 +464,8 @@ updates it, and waits till it's up before moving on to the next.  This ensures
 that users never experience an outage. The following command will update the
 html-frontend deployment container image.
 
-``` powershell
-kubectl set image deployment/html-frontend html-frontend=html-frontend:2.0
+``` bash
+kubectl set image deployment/html-frontend dalealleshouse/html-frontend=html-frontend:2.0
 kubectl get deployments 
 ```
 
@@ -477,17 +474,17 @@ Navigating to demo.com should show a significant error. Obviously, the 2.0
 image is flawed. Luckily, with K8S it's rolling back to the previous images is
 as easy as the following command:
 
-``` powershell
+``` bash
 kubectl rollout undo deployment html-frontend
 ```
 
 There are a few different options for rollbacks. The following commands display
-the roll out history of a deployment.  Putting a *--revision=#* after the
+the roll out history of a deployment.  Putting a *--to-revision=#* after the
 *rollout undo* command will roll back to specific version.
 
-``` powershell
+``` bash
 kubectl rollout history deployment html-frontend
-kubectl rollout history deployment html-frontend --revision=*REVISION_NUMBER*
+kubectl rollout history deployment html-frontend --to-revision=*REVISION_NUMBER*
 ```
 
 ## Other Cool Stuff
