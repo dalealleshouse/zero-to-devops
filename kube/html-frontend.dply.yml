@@ -20,7 +20,7 @@ spec:
         name: html-frontend
         env:
           - name: STATUS_HOST
-            value: status.demo.com
+            value: k8-master:31111
         ports:
         - containerPort: 80
           protocol: TCP

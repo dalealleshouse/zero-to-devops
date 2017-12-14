@@ -229,8 +229,8 @@ kubectl logs *POD_NAME*
 
 Viewing the logs of the java consumer reveals that it unable to connect to the
 queue. Each pod has an IP address that is reachable inside the K8S cluster. One
-could simply determine the IP address of the queue and update the ruby
-producer. However, the address is ephemeral.  If the pod dies and is
+could simply determine the IP address of the queue and update the java
+consumer. However, the address is ephemeral.  If the pod dies and is
 regenerated the IP address will change. K8S services provide a durable endpoint
 for pods. The command below creates a *Cluster IP* service and exposes ports
 for the queue pod.
@@ -257,13 +257,11 @@ The commands below create *Node Port* services for the NGINX and REST API pods.
 ``` bash
 kubectl create service nodeport html-frontend --tcp=80:80 --node-port=31112
 kubectl create service nodeport status-api --tcp=80:5000 --node-port=31111
-# kubectl expose deployment status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
-# kubectl expose deployment html-frontend --port=80 --name=html-frontend --type=NodePort
 ```
 
 To ensure the services were created correctly, run the command below.
 
-``` powershell
+``` bash
 kubectl get services
 ```
 As a side note, the command above reveals a service that we didn't create named
@@ -275,8 +273,8 @@ readily available. This is beyond the scope of the demo, but more information
 is available
 [here](https://kubernetes.io/docs/concepts/overview/kubernetes-api/).
 
-If everything is configured correctly, navigating to demo.com will display the
-page served up from the NGINX pod.
+If everything is configured correctly, navigating to http://k8-master:31112
+will display the page served up from the NGINX pod.
 
 ## Infrastructure as Code
 
@@ -290,20 +288,20 @@ services for this demo are in the kube project folder.
 
 To delete every object from the demo, use the following command:
 
-``` powershell
+``` bash
 kubectl delete -f .\kube\
 ```
 
 It's easy to recreate everything with the following command:
 
-``` powershell
+``` bash
 kubectl create -f .\kube\
 ```
 
 The commands above also work for individual files. A single object is updated
 with the following command:
 
-``` powershell
+``` bash
 kubectl replace -f .\kube\html-frontend.dply.yml
 ```
 
@@ -315,23 +313,42 @@ with K8S.
 K8S comes equipped with two decent monitoring tools out of the box:
 [dashboard](https://kubernetes.io/docs/user-guide/ui/) and
 [heapster](http://blog.kubernetes.io/2015/05/resource-usage-monitoring-kubernetes.html).
-The following command outputs several useful K8S URLs, notice there is a URL
-for both tools.
 
-``` powershell
-kubectl cluster-info
+The major cloud providers have the dashboard pre-configured. However, we will
+need to set it up manually. The steps below deploy a development dashboard
+without major concerns for security.
+
+Install the dashboard.
+``` bash
+curl -sSL https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard-arm.yaml \
+	| kubectl create -f -
 ```
 
-If you are using Minikube, Heapster is not enabled by default and the dashboard
-URL isn't quite right. Use the following command to see both tools using Minikube.
+The command below creates a simple admin account. However, in production
+situations, it is most likely desirable to create more fine grained accounts.
 
-``` powershell
-minikube addons enable heapster
-minikube addons open heapster
-minikube dashboard open
+```bash
+kubectl create -f dashboard-auth/
 ```
 
-The monitoring tools are implemented as plug ins so they easy to replace/modify.
+Next, open a proxy tunnel to the dashboard with the following command.
+
+``` bash
+kubectl proxy
+```
+
+Now navigate to this address
+[http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/](http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/).
+
+You will be required to log in with a bearer token. The following command will
+retrieve the token from K8S.
+
+``` bash
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | \
+grep admin-user | awk '{print $1}')
+```
+
+Copy and paste the value in the *token* field to log in.
 
 ## Scaling
 

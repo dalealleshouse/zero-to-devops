@@ -10,6 +10,7 @@ spec:
     - port: 80
       protocol: TCP
       targetPort: 5000
+      nodePort: 31111
   selector:
     run: status-api
   type: NodePort
