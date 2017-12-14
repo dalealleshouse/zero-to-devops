@@ -16,5 +16,5 @@ spec:
         run: queue
     spec:
       containers:
-      - image: rabbitmq:3.6.6-management
+      - image: rabbitmq:3.7-management-alpine
         name: queue

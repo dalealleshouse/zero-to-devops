@@ -142,8 +142,7 @@ docker push dalealleshouse/status-api:1.0
 The internet connectivity at conferences can be a bit capricious. Therefore,
 the images are manually downloaded on each pi before the demo. During the on
 stage demonstration, the containers will be available locally.  Therefore, K8S
-will not attempt to download them. Navigate to the project directory and run
-the commands below.
+will not attempt to download them. SSH into each pi and run the commands below.
 
 ``` bash
 docker pull dalealleshouse/html-frontend:1.0
@@ -151,7 +150,7 @@ docker pull dalealleshouse/html-frontend:2.0
 docker pull dalealleshouse/java-consumer:1.0
 docker pull dalealleshouse/ruby-producer:1.0
 docker pull dalealleshouse/status-api:1.0
-docker pull rabbitmq:3.6.6-management
+docker pull arm32v6/rabbitmq:3.7-management-alpine
 ```
    
 ## Deployments
@@ -170,11 +169,11 @@ higher level object that encompasses both *Pod*s and *Replica Set*s. The
 commands below create *Deployment*s for each container in the demo system.
 
 ``` powershell
-kubectl run html-frontend --image=html-frontend:1.0 --port=80 --env STATUS_HOST=status.demo.com
-kubectl run java-consumer --image=java-consumer:1.0
-kubectl run ruby-producer --image=ruby-producer:1.0
-kubectl run status-api --image=status-api:1.0 port=5000
-kubectl run queue --image=rabbitmq:3.6.6-management
+kubectl run html-frontend --image=dalealleshouse/html-frontend:1.0 --port=80 --env STATUS_HOST=status.demo.com
+kubectl run java-consumer --image=dalealleshouse/java-consumer:1.0
+kubectl run ruby-producer --image=dalealleshouse/ruby-producer:1.0
+kubectl run status-api --image=dalealleshouse/status-api:1.0 port=5000
+kubectl run queue --image=arm32v6/rabbitmq:3.7-management-alpine
 ```
 
 Verify the objects were created correctly with the following command.

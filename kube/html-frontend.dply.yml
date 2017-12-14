@@ -16,7 +16,7 @@ spec:
         run: html-frontend
     spec:
       containers:
-      - image: html-frontend:1.0
+      - image: dalealleshouse/html-frontend:1.0
         name: html-frontend
         env:
           - name: STATUS_HOST

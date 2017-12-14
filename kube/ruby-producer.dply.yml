@@ -17,5 +17,5 @@ spec:
         run: ruby-producer
     spec:
       containers:
-      - image: ruby-producer:1.0
+      - image: dalealleshouse/ruby-producer:1.0
         name: ruby-producer

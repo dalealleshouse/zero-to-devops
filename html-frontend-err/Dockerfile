@@ -1,4 +1,4 @@
-FROM nginx
+FROM tobi312/rpi-nginx
 
 COPY ./index.html /usr/share/nginx/html
 COPY ./healthz.html /usr/share/nginx/html
