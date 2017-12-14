@@ -65,9 +65,10 @@ virtually anywhere, including on premise.
 This demo utilizes a cluster made from Raspberry Pis, as described in [Scott
 Hanselman's excellent
 blog](https://www.hanselman.com/blog/HowToBuildAKubernetesClusterWithARMRaspberryPiThenRunNETCoreOnOpenFaas.aspx).
-Although it will run in other cluster environments, there will be minor
-configuration changes. These instructions apply specifically to this
-configuration.
+The Docker images are for ARM32 architectures, so there may be problems with
+other environments. However, the K8S commands will not change. Check out the
+[master branch](https://github.com/dalealleshouse/zero-to-devops/tree/master)
+for a 64 bit version.
 
 ## Specific Cluster Configuration
 
