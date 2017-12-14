@@ -90,10 +90,12 @@ file](https://support.rackspace.com/how-to/modify-your-hosts-file/) provide
 domain name resolution. The exact entries are listed below. Obviously, your IP
 addresses will be different.
 
+```
 192.168.1.3 k8-master
 192.168.1.4 k8-node-1
 192.168.1.5 k8-node-2
 192.168.1.6 k8-node-3
+```
 
 Finally, the demo utilizes the
 [WSL](https://docs.microsoft.com/en-us/windows/wsl/about) ubuntu shell (yes,
@@ -110,69 +112,6 @@ If everything is set up correctly, you should be able to ssh into each pi.
 ssh pi@<pi name>
 ```
 
-## Ingress
-
-This demo employs an [ingress](https://kubernetes.io/docs/user-guide/ingress/)
-to route incoming cluster traffic to desired K8S services. The terms *service*
-and *pod* are used frequently.  Don't worry if you don't understand these
-concepts yet, they are covered below.
-
-An ingress is a set of rules that allow inbound connections to reach K8S
-services. In K8S, an ingress has two components: an ingress resource and an
-ingress controller. An ingress resource is a K8S object that defines routing
-rules. The one used for this demo is located [here](/kube/ingress.yml). An
-ingress controller is a daemon that runs as a K8S pod (similar to a container).
-It is responsible for watching the ingress resource and satisfying requests to
-the ingress. In short, it's special load balancer.
-
-In typical scenarios, you may be required to supply your own ingress controller
-using something like NGINX or Traefik. Minikube comes with a preconfigured NGIX
-[ingress
-controller](https://github.com/kubernetes/minikube/tree/master/deploy/addons/ingress).
-Use the following command to enable it.
-
-``` powershell
-minikube addons enable ingress
-```
-
-Next, create the K8S ingress resource. Assuming you are in this project's root
-directory, run the following command.
-
-``` powershell
-kubectl create -f .\kube\ingress.yml
-```
-
-Barring any errors, the command below should display information about the
-ingress you just created.
-
-``` powershell
-kubectl describe ing
-```
-
-The astute reader will notice that the ingress rules are routing traffic from
-demo.com and status.demo.com. For demo purposes, we are going to update our
-hosts file to map those domains to the IP address of the cluster. The command
-below will reveal the Minikube address.
-
-``` powershell
-minikube ip
-```
-
-Add the entries below to your hosts file. Make sure to use the IP address from
-the above command. In case you need it, here are instructing for updating the
-hosts file on
-[windows](https://support.rackspace.com/how-to/modify-your-hosts-file/) and
-[mac](http://www.imore.com/how-edit-your-macs-hosts-file-and-why-you-would-want)
-
-
-```
-*MINIKUBE_IP* demo.com
-*MINIKUBE_IP* status.demo.com
-```
-
-Make sure to remove these after the demo in case you ever want to visit the
-actual demo.com website.
-
 ## Image Registry
 
 Typically, organizations have private Docker repositories. However, for the
@@ -181,33 +120,38 @@ account](https://hub.docker.com/u/dalealleshouse/). It is possible to create a
 [local docker registry](https://docs.docker.com/registry/deploying/) but the
 complexity surrounding security distracts from our purpose. 
 
-The internet connectivity at conferences can be a bit capricious. Therefore, I
-manually downloaded the images on to each pi before the demo. 
+Below is the commands to build and deploy each container to docker-hub.
 
+``` bash
+docker build --tag dalealleshouse/html-frontend:1.0 html-frontend/
+docker push dalealleshouse/html-frontend:1.0
 
-Therefore, we are going to
-manually build (in advance) the demo containers using Minikube's docker daemon.
-During the on stage demonstration, the containers will be available locally.
-Therefore, K8S will not attempt to download them. Navigate to the project
-directory and run the commands below.
+docker build --tag dalealleshouse/html-frontend:2.0 html-frontend-err/
+docker push dalealleshouse/html-frontend:2.0
 
-Using an external Docker registry isn't a viable option for this demo because
-internet access isn't guaranteed.
-``` powershell
-# point to the docker daemon on the minikube machine 
-# eval $(minikube docker-env) on Mac/Linux 
-& minikube docker-env | Invoke-Expression
+docker build --tag dalealleshouse/java-consumer:1.0 java-consumer/
+docker push dalealleshouse/java-consumer:1.0
 
-docker build --tag=html-frontend:1.0 html-frontend/
-docker build --tag=html-frontend:2.0 html-frontend-err/
-docker build --tag=java-consumer:1.0 java-consumer/ 
-docker build --tag=ruby-producer:1.0 ruby-producer/
-docker build --tag=status-api:1.0 status-api/
+docker build --tag dalealleshouse/ruby-producer:1.0 ruby-producer/
+docker push dalealleshouse/ruby-producer:1.0
+
+docker build --tag dalealleshouse/status-api:1.0 status-api/
+docker push dalealleshouse/status-api:1.0
+```
+
+The internet connectivity at conferences can be a bit capricious. Therefore,
+the images are manually downloaded on each pi before the demo. During the on
+stage demonstration, the containers will be available locally.  Therefore, K8S
+will not attempt to download them. Navigate to the project directory and run
+the commands below.
+
+``` bash
+docker pull dalealleshouse/html-frontend:1.0
+docker pull dalealleshouse/html-frontend:2.0
+docker pull dalealleshouse/java-consumer:1.0
+docker pull dalealleshouse/ruby-producer:1.0
+docker pull dalealleshouse/status-api:1.0
 docker pull rabbitmq:3.6.6-management
-
-# point back to the local docker daemon
-# eval $(minikube docker-env -u) on Mac/Linux 
-& minikube docker-env -u | Invoke-Expression
 ```
    
 ## Deployments
