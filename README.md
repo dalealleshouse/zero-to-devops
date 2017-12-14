@@ -22,7 +22,8 @@ The image below outlines the system we are going to host on K8S.
 
 The demo system consists of five separate applications that work together.
 
-1. NGINX serves a static HTML file to a browser
+1. NGINX serves a static HTML file to a browser. The page makes requests to the
+   ASP.NET core REST API and displays the results.
 1. ASP.NET Core REST API accepts requests from the browser and returns queue
    stats
 1. RabbitMQ is configured as a standard work queue
@@ -68,61 +69,45 @@ Although it will run in other cluster environments, there will be minor
 configuration changes. These instructions apply specifically to this
 configuration.
 
-## Minikube
+## Specific Cluster Configuration
 
-[Minikube](https://github.com/kubernetes/minikube) is a single-node K8S cluster
-that runs inside a virtual machine intended for development use and testing.
-It's a great option for presentations (like this one) because it provides a
-means to work with K8S without an internet connection. Yes, believe it or not,
-internet connectivity is a bit capricious at conferences and meet ups.
+This section outlines the configuration that is specific to the demo cluster
+and cannot be inferred from the previous section.
 
-This demo should work fine on Mac, older Windows, or Linux. However, it hasn't
-been tested and will require slightly different Minikube configurations. These
-instruction apply specifically to Windows 10 and Powershell. If you are able to
-get it working with a different OS or configuration, add information about your
-experience and I'll happily accept a pull request.
+There are four pis in the demo cluster.
+- k8-master
+- k8-node-1
+- k8-node-3
+- k8-node-3
 
-Windows 10 Minikube configuration:
+In order to provide durable IP addresses for each pi, the router issues static
+leases. Detailed information is available
+[here](https://www.howtogeek.com/184310/ask-htg-should-i-be-setting-static-ip-addresses-on-my-router/).
 
-- Enable HyperV (If you are able to run Docker, it should be)
-- Create a Virtual Switch in Hyper-V:
-  - Open Hyper-V Manager
-  - Select Virtual Switch Manager
-  - Select the "External" switch type
-  - Click the "Create Virtual Switch" button
-  - Select your network adapter from the drop down list under "External Network"
-  - Name the switch "minikube"
-  - Close Virtual Switch Manager and Hyper-V Manager
-- Path minikube
-  - Download [minikube](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
-  - Save the file in an easily accessible path
-  - Run the command below
+The demo utilizes a Microsoft Surface Book to access the cluster.
+Manual entries to the [hosts
+file](https://support.rackspace.com/how-to/modify-your-hosts-file/) provide
+domain name resolution. The exact entries are listed below. Obviously, your IP
+addresses will be different.
 
-``` powershell
-# add this to your profile to make it permanent
-New-Alias minikube *PATH-TO-MINIKUBE-EXE* 
-```
+192.168.1.3 k8-master
+192.168.1.4 k8-node-1
+192.168.1.5 k8-node-2
+192.168.1.6 k8-node-3
 
-All minikube commands require running Powershell as an Administrator. The
-command below will start minikube and configure kubectl.
+Finally, the demo utilizes the
+[WSL](https://docs.microsoft.com/en-us/windows/wsl/about) ubuntu shell (yes,
+it's really Ubuntu, distributed by Cononical, running on Windows). If you
+haven't tried this amazing new feature, do it. What are you waiting for, do it
+NOW! The same entries from the windows hosts file need to go in the /etc/hosts
+file to provide domain name resolution for the shell.
 
-``` powershell
-minikube --vm-driver=hyperv --hyperv-virtual-switch=minikube start 
-```
 
-Verify everything is configured correctly with the following command.
+If everything is set up correctly, you should be able to ssh into each pi.
 
-``` powershell 
-kubectl get cs
-```
-
-The output of the command above should match the following:
-
-``` powershell
-NAME                 STATUS    MESSAGE              ERROR
-controller-manager   Healthy   ok
-scheduler            Healthy   ok
-etcd-0               Healthy   {"health": "true"}
+``` bash
+# eg ssh pi@k8-master or ssh pi@k8-node-3
+ssh pi@<pi name>
 ```
 
 ## Ingress
@@ -190,15 +175,24 @@ actual demo.com website.
 
 ## Image Registry
 
-Using an external Docker registry isn't a viable option for this demo because
-internet access isn't guaranteed. It is possible to create a [local docker
-registry](https://docs.docker.com/registry/deploying/) but the complexity
-surrounding security distracts from the purpose.  Therefore, we are going to
+Typically, organizations have private Docker repositories. However, for the
+sake of brevity, this demo utilizes my personal [docker hub
+account](https://hub.docker.com/u/dalealleshouse/). It is possible to create a
+[local docker registry](https://docs.docker.com/registry/deploying/) but the
+complexity surrounding security distracts from our purpose. 
+
+The internet connectivity at conferences can be a bit capricious. Therefore, I
+manually downloaded the images on to each pi before the demo. 
+
+
+Therefore, we are going to
 manually build (in advance) the demo containers using Minikube's docker daemon.
 During the on stage demonstration, the containers will be available locally.
 Therefore, K8S will not attempt to download them. Navigate to the project
 directory and run the commands below.
 
+Using an external Docker registry isn't a viable option for this demo because
+internet access isn't guaranteed.
 ``` powershell
 # point to the docker daemon on the minikube machine 
 # eval $(minikube docker-env) on Mac/Linux 
