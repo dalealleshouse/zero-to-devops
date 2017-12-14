@@ -465,7 +465,7 @@ that users never experience an outage. The following command will update the
 html-frontend deployment container image.
 
 ``` bash
-kubectl set image deployment/html-frontend dalealleshouse/html-frontend=html-frontend:2.0
+kubectl set image deployment/html-frontend html-frontend=dalealleshouse/html-frontend:2.0
 kubectl get deployments 
 ```
 
