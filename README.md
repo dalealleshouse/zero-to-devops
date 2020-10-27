@@ -1,7 +1,7 @@
 # Zero to DevOps in Under an Hour with Kubernetes 
 
 This repo contains the demo code presented in the Zero to DevOps talk. Slides
-available [here](http://slides.com/dalealleshouse/kube)
+available [here](http://slides.com/dalealleshouse/k8)
 
 ## Abstract
 
@@ -44,7 +44,7 @@ All of the following software must be installed in order to run this demo.
 Although it most likely goes without saying, the first thing you need to do is
 clone this repo.
 
-``` powershell
+``` bash
 git clone https://github.com/dalealleshouse/zero-to-devops.git
 ```
 
@@ -54,73 +54,20 @@ In order to run the demo, you must have a working K8S cluster. Creating a
 cluster is easy with all three of the major cloud providers.
 
 - [Google Cloud](https://cloud.google.com/container-engine/docs/quickstart)
-- [Azure](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough)
-- [Amazon](https://kubernetes.io/docs/getting-started-guides/aws/)
+- [Azure](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough)
+- [Amazon](https://aws.amazon.com/kubernetes/)
 
 There are also many [other
 options](https://kubernetes.io/docs/getting-started-guides/) for running
-virtually anywhere, including on premise.
+virtually anywhere, including on premise. This demo utilizes [Docker
+Desktop](./https://www.docker.com/products/docker-desktop) which comes with a
+built-in k8 cluster. To enable it, simple select the "Enable Kubernetes" options
+as pictured below.
 
-This demo utilizes [Minikube](https://github.com/kubernetes/minikube). Although
-it will run in other cluster environments, there will be minor configuration
-changes. These instructions apply specifically to Minikube.
+![Docker Desktop k8s](./docker_k8s.png)
 
-## Minikube
-
-[Minikube](https://github.com/kubernetes/minikube) is a single-node K8S cluster
-that runs inside a virtual machine intended for development use and testing.
-It's a great option for presentations (like this one) because it provides a
-means to work with K8S without an internet connection. Yes, believe it or not,
-internet connectivity is a bit capricious at conferences and meet ups.
-
-This demo should work fine on Mac, older Windows, or Linux. However, it hasn't
-been tested and will require slightly different Minikube configurations. These
-instruction apply specifically to Windows 10 and Powershell. If you are able to
-get it working with a different OS or configuration, add information about your
-experience and I'll happily accept a pull request.
-
-Windows 10 Minikube configuration:
-
-- Enable HyperV (If you are able to run Docker, it should be)
-- Create a Virtual Switch in Hyper-V:
-  - Open Hyper-V Manager
-  - Select Virtual Switch Manager
-  - Select the "External" switch type
-  - Click the "Create Virtual Switch" button
-  - Select your network adapter from the drop down list under "External Network"
-  - Name the switch "minikube"
-  - Close Virtual Switch Manager and Hyper-V Manager
-- Path minikube
-  - Download [minikube](https://storage.googleapis.com/minikube/releases/v0.17.1/minikube-windows-amd64.exe) for windows
-  - Save the file in an easily accessible path
-  - Run the command below
-
-``` powershell
-# add this to your profile to make it permanent
-New-Alias minikube *PATH-TO-MINIKUBE-EXE* 
-```
-
-All minikube commands require running Powershell as an Administrator. The
-command below will start minikube and configure kubectl.
-
-``` powershell
-minikube --vm-driver=hyperv --hyperv-virtual-switch=minikube start 
-```
-
-Verify everything is configured correctly with the following command.
-
-``` powershell 
-kubectl get cs
-```
-
-The output of the command above should match the following:
-
-``` powershell
-NAME                 STATUS    MESSAGE              ERROR
-controller-manager   Healthy   ok
-scheduler            Healthy   ok
-etcd-0               Healthy   {"health": "true"}
-```
+Although this demo will run in other cluster environments, there will be minor
+configuration changes. These instructions apply specifically to Docker Desktop.
 
 ## Ingress
 
@@ -137,49 +84,38 @@ ingress controller is a daemon that runs as a K8S pod (similar to a container).
 It is responsible for watching the ingress resource and satisfying requests to
 the ingress. In short, it's special load balancer.
 
-In typical scenarios, you may be required to supply your own ingress controller
-using something like NGINX or Traefik. Minikube comes with a preconfigured NGIX
-[ingress
-controller](https://github.com/kubernetes/minikube/tree/master/deploy/addons/ingress).
-Use the following command to enable it.
+This demo utilizes an
+[nginx](https://kubernetes.github.io/ingress-nginx/deploy/) ingress. It's
+configured using the following command:
 
-``` powershell
-minikube addons enable ingress
+``` bash
+kubectl apply -f \
+    https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/cloud/deploy.yaml
 ```
 
 Next, create the K8S ingress resource. Assuming you are in this project's root
 directory, run the following command.
 
-``` powershell
-kubectl create -f .\kube\ingress.yml
+``` bash
+kubectl create -f kube/ingress.yml
 ```
 
 Barring any errors, the command below should display information about the
 ingress you just created.
 
-``` powershell
+```
 kubectl describe ing
 ```
 
 The astute reader will notice that the ingress rules are routing traffic from
 demo.com and status.demo.com. For demo purposes, we are going to update our
-hosts file to map those domains to the IP address of the cluster. The command
-below will reveal the Minikube address.
-
-``` powershell
-minikube ip
-```
-
-Add the entries below to your hosts file. Make sure to use the IP address from
-the above command. In case you need it, here are instructing for updating the
-hosts file on
-[windows](https://support.rackspace.com/how-to/modify-your-hosts-file/) and
-[mac](http://www.imore.com/how-edit-your-macs-hosts-file-and-why-you-would-want)
-
+hosts file to map those domains to the localhost. Add the entries below to your
+hosts file. Make sure to use the IP address from the above command. In case you
+need it, here are instructing for updating the hosts file on windows and mac.
 
 ```
-*MINIKUBE_IP* demo.com
-*MINIKUBE_IP* status.demo.com
+127.0.0.1 demo.com
+127.0.0.1 status.demo.com
 ```
 
 Make sure to remove these after the demo in case you ever want to visit the
@@ -191,26 +127,18 @@ Using an external Docker registry isn't a viable option for this demo because
 internet access isn't guaranteed. It is possible to create a [local docker
 registry](https://docs.docker.com/registry/deploying/) but the complexity
 surrounding security distracts from the purpose.  Therefore, we are going to
-manually build (in advance) the demo containers using Minikube's docker daemon.
-During the on stage demonstration, the containers will be available locally.
-Therefore, K8S will not attempt to download them. Navigate to the project
-directory and run the commands below.
+manually build (in advance) the demo container.  During the on stage
+demonstration, the containers will be available locally.  Therefore, K8S will
+not attempt to download them. Navigate to the project directory and run the
+commands below.
 
-``` powershell
-# point to the docker daemon on the minikube machine 
-# eval $(minikube docker-env) on Mac/Linux 
-& minikube docker-env | Invoke-Expression
-
+``` bash
 docker build --tag=html-frontend:1.0 html-frontend/
 docker build --tag=html-frontend:2.0 html-frontend-err/
 docker build --tag=java-consumer:1.0 java-consumer/ 
 docker build --tag=ruby-producer:1.0 ruby-producer/
 docker build --tag=status-api:1.0 status-api/
 docker pull rabbitmq:3.6.6-management
-
-# point back to the local docker daemon
-# eval $(minikube docker-env -u) on Mac/Linux 
-& minikube docker-env -u | Invoke-Expression
 ```
    
 ## Deployments
@@ -220,15 +148,7 @@ a group of one or more containers that act as a single logical unit. The demo
 consists of five individual containers that act autonomously so each *Pod* has
 a single container.
 
-A K8S [*Replica Set*](https://kubernetes.io/docs/user-guide/replicasets/)
-specifies the number of desired pod replicas. K8S continually monitors *Replica
-Sets* and adjusts the number of replicas accordingly.
-
-A K8S [*Deployment*](https://kubernetes.io/docs/user-guide/deployments/) is a
-higher level object that encompasses both *Pod*s and *Replica Set*s. The
-commands below create *Deployment*s for each container in the demo system.
-
-``` powershell
+``` bash
 kubectl run html-frontend --image=html-frontend:1.0 --port=80 --env STATUS_HOST=status.demo.com
 kubectl run java-consumer --image=java-consumer:1.0
 kubectl run ruby-producer --image=ruby-producer:1.0
@@ -238,9 +158,7 @@ kubectl run queue --image=rabbitmq:3.6.6-management
 
 Verify the objects were created correctly with the following command.
 
-``` powershell
-kubectl get deployments
-kubectl get rs
+``` bash
 kubectl get pods
 ```
 
@@ -248,8 +166,8 @@ Each pod represents a container running on the K8S cluster.  kubectl mirrors
 several Docker commands. For instance, you can obtain direct access to a pod
 with exec or view stdout using log.
 
-``` powershell
-kubectl exec -it *POD_NAME* bash
+``` bash
+kubectl exec -it *POD_NAME* -- bash
 kubectl logs *POD_NAME*
 ```
 
@@ -263,8 +181,8 @@ regenerated the IP address will change. K8S services provide a durable endpoint
 for pods. The command below creates a *Cluster IP* service and exposes ports
 for the queue pod.
 
-``` powershell
-kubectl expose deployment queue --port=15672,5672 --name=queue
+``` bash
+kubectl expose pod queue --port=15672,5672 --name=queue
 ```
 
 It may take a minute or two, but inspecting the logs from the ruby producer pod
@@ -282,14 +200,14 @@ Port* services.
 
 The commands below create *Node Port* services for the NGINX and REST API pods. 
 
-``` powershell
-kubectl expose deployment html-frontend --port=80 --name=html-frontend --type=NodePort
-kubectl expose deployment status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
+``` bash
+kubectl expose pod html-frontend --port=80 --name=html-frontend --type=NodePort
+kubectl expose pod status-api --port=80 --target-port=5000 --name=status-api --type=NodePort
 ```
 
 To ensure the services were created correctly, run the command below.
 
-``` powershell
+``` bash
 kubectl get services
 ```
 As a side note, the command above reveals a service that we didn't create named
@@ -316,62 +234,73 @@ services for this demo are in the kube project folder.
 
 To delete every object from the demo, use the following command:
 
-``` powershell
-kubectl delete -f .\kube\
+``` bash
+kubectl delete pod --all
+kubectl delete -f ./kube/
 ```
 
 It's easy to recreate everything with the following command:
 
-``` powershell
-kubectl create -f .\kube\
+``` bash
+kubectl create -f ./kube/
 ```
 
 The commands above also work for individual files. A single object is updated
 with the following command:
 
-``` powershell
-kubectl replace -f .\kube\html-frontend.dply.yml
+``` bash
+kubectl replace -f ./kube/html-frontend.dply.yml
 ```
 
-Configuration files stored in source control is the recommended way to work
-with K8S.
+Configuration files stored in source control is the recommended way to work with
+K8S.
 
 ## Dashboard/Monitoring
+The K8s [dashboard](https://github.com/kubernetes/dashboard) is a decent freely
+available monitoring tool. Installation is trivial, simply run the following
+command:
 
-K8S comes equipped with two decent monitoring tools out of the box:
-[dashboard](https://kubernetes.io/docs/user-guide/ui/) and
-[heapster](http://blog.kubernetes.io/2015/05/resource-usage-monitoring-kubernetes.html).
-The following command outputs several useful K8S URLs, notice there is a URL
-for both tools.
-
-``` powershell
-kubectl cluster-info
+``` bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.4/aio/deploy/recommended.yaml
 ```
 
-If you are using Minikube, Heapster is not enabled by default and the dashboard
-URL isn't quite right. Use the following command to see both tools using Minikube.
+Before using it, you will need to create a user. For convince, this project has
+a admin user yml definition file located [here](./kube/admin_user.yml). Use the
+following command to create the user.
 
-``` powershell
-minikube addons enable heapster
-minikube addons open heapster
-minikube dashboard open
+``` bash
+kubectl create -f kube/user/admin_user.yml
 ```
 
-The monitoring tools are implemented as plug ins so they easy to replace/modify.
+To access the dashboard locally, you will need to tunnel traffic using the
+following command:
+
+```bash
+kubctl proxy
+```
+
+The dashboard should be available at this address:
+<http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/>
+
+You will need a temporary access token to access the dashboard. Generate one
+using the following command:
+
+``` bash
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+```
 
 ## Scaling
-
 Increasing the number of pod replicas on a deployment is as easy as running the
 command below.
 
-``` powershell
+``` bash
 kubectl scale deployment html-frontend --replicas=3
 ```
 
 Running this command reveals that the three requested replicas are already up
 and running.
 
-``` powershell
+``` bash
 kubectl get pods -l run=html-frontend
 ```
 
@@ -387,7 +316,14 @@ replicas will be added. If it goes below 50%, replicas are removed. Most
 details on the auto scaling algorithm can be found
 [here](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/horizontal-pod-autoscaler.md)
 
-``` powershell
+There is a bug in the auto scaler for Docker Desktop. Use the following commands
+as a workaround:
+``` bash
+kubectl delete -n kube-system deployments.apps metrics-server
+kubectl apply -f ./kube/metrics-server/components.yaml
+```
+
+``` bash
 kubectl autoscale deployment java-consumer --min=1 --max=5 --cpu-percent=50
 ```
 
@@ -399,7 +335,7 @@ The autoscale command creates a *Horizontal Pod Scaling* resource. Just like
 any other K8S resource, it can be manipulated via a yaml file. The following
 commands display information about the resource.
 
-``` powershell
+``` bash
 kubectl get hpa
 kubectl describe hpa
 kubectl get hpa -o yaml
@@ -410,11 +346,7 @@ kubectl get hpa -o yaml
 Replica controllers automatically add new pods when scaling up.  Likewise, they
 generate a new pod when one goes down. See the commands below.
 
-``` powershell
-# point to the docker daemon on the minikube machine 
-# eval $(minikube docker-env) on Mac/Linux 
-& minikube docker-env | Invoke-Expression
-
+``` bash
 # View the html-frontend pods
 docker ps -f label=io.kubernetes.container.name=html-frontend
 
@@ -451,12 +383,12 @@ a bad request. The following commands simulate such a failure.
 
 ```
 kubectl get pods
-kubectl exec *POD_NAME* rm usr/share/nginx/html/healthz.html
+kubectl exec *POD_NAME* -- rm usr/share/nginx/html/healthz.html
 ```
 
 Running `kubectl get pods` again should produce an output similar to below:
 
-``` powershell
+``` bash
 NAME                             READY     STATUS    RESTARTS   AGE
 html-frontend-1306390030-t1sqx   1/1       Running   1          12m
 ...
@@ -476,7 +408,7 @@ updates it, and waits till it's up before moving on to the next.  This ensures
 that users never experience an outage. The following command will update the
 html-frontend deployment container image.
 
-``` powershell
+``` bash
 kubectl set image deployment/html-frontend html-frontend=html-frontend:2.0
 kubectl get deployments 
 ```
@@ -486,7 +418,7 @@ Navigating to demo.com should show a significant error. Obviously, the 2.0
 image is flawed. Luckily, with K8S it's rolling back to the previous images is
 as easy as the following command:
 
-``` powershell
+``` bash
 kubectl rollout undo deployment html-frontend
 ```
 
@@ -494,7 +426,7 @@ There are a few different options for rollbacks. The following commands display
 the roll out history of a deployment.  Putting a *--revision=#* after the
 *rollout undo* command will roll back to specific version.
 
-``` powershell
+``` bash
 kubectl rollout history deployment html-frontend
 kubectl rollout history deployment html-frontend --revision=*REVISION_NUMBER*
 ```
